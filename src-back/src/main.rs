@@ -21,9 +21,9 @@ async fn save_unit_training_plan(id: u64) -> String {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/api/", routes![get_all_training])
-        .mount("/api/", routes![get_unit_training])
-        .mount("/api/", routes![save_unit_training])
+        .mount("/api/", routes![get_all_training_plan])
+        .mount("/api/", routes![get_unit_training_plan])
+        .mount("/api/", routes![save_unit_training_plan])
         .mount("/", FileServer::from(relative!("html")))
 
 }
