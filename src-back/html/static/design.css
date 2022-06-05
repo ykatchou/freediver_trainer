@@ -1,0 +1,12 @@
+
+.plan_part{
+    border: 1px solid black;
+    padding: 3px;
+    margin: 3px;
+}
+
+.plan_part_exercise{
+    border: 1px solid darkblue;
+    padding: 3px;
+    margin: 3px;
+}

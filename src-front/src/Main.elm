@@ -8,6 +8,7 @@ import Json.Decode exposing (string)
 
 import TrainingPlan exposing (..)
 import TrainingPlanHelper exposing (..)
+import TrainingPlanView exposing(..)
 
 
 -- MAIN
@@ -24,12 +25,10 @@ type alias Model =
 
 init : Model
 init =
-  Model (createDefaultTrainingPlan "default_name" "default_author" "default_group")
+  Model (createDefaultTrainingPlan "My Training Plan" "Yoann Katchourine" "Mid-beginner")
 
 
 -- UPDATE
-
-
 update : Msg -> Model -> Model
 update msg model =
   case msg of
