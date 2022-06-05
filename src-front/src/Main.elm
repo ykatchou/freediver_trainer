@@ -1,29 +1,20 @@
 module Main exposing(..)
 
--- Input a user name and password. Make sure the password matches.
---
--- Read how it works:
---   https://guide.elm-lang.org/architecture/forms.html
---
-
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
+import Json.Decode exposing (string)
 
+import TrainingPlanModel exposing (..)
 
 
 -- MAIN
-
-
 main =
   Browser.sandbox { init = init, update = update, view = view }
 
 
-
 -- MODEL
-
-
 type alias Model =
   { name : String
   , password : String
@@ -36,9 +27,7 @@ init =
   Model "" "" ""
 
 
-
 -- UPDATE
-
 
 type Msg
   = Name String
