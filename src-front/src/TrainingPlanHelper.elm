@@ -4,33 +4,76 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import TrainingPlan exposing(..)
-
-import Main exposing (Msg)
 import Debug exposing (toString)
+import String exposing (toInt)
 
 
-createNewTrainingPlan: String -> String -> String -> TrainingPlan
-createNewTrainingPlan name author group=
+type Msg
+  = Name String
+
+createDurationFromSec: Int -> Duration
+createDurationFromSec s=
+  let m = s // 60
+  in
+    Duration m (s-(m*60))
+
+createDurationFromMin: Int -> Duration
+createDurationFromMin m=
+    Duration m 0
+
+calculateTotalExerciseDuration: TrainingPlanExercise -> Duration
+calculateTotalExerciseDuration exo=
+  Duration 0 0
+    --TODO calculateTotalExerciseDuration
+
+
+calculateTotalPartDuration: TrainingPlanPart -> Duration
+calculateTotalPartDuration part=
+  Duration 0 0
+  --TODO calculateTotalPartDuration
+
+
+createDefaultTrainingPlan: String -> String -> String -> TrainingPlan
+createDefaultTrainingPlan name author group=
   TrainingPlan name author "" group [
-    TrainingPlanPart "Briefing" NoWater []
-    ,TrainingPlanPart "Corpus" SwimmingPool25m []
-    ,TrainingPlanPart "Debriefing" NoWater []
+    TrainingPlanPart "Briefing" NoWater [
+      TrainingPlanExercise Unknown "Session explanations" 0
+      , TrainingPlanExercise 
+          (Squarred
+            (SquarredExercise
+              (createDurationFromSec 15)
+              (createDurationFromSec 15)
+              (createDurationFromSec 15)
+              (createDurationFromSec 15)
+            ))
+         "Squarred" 4
+    ]
+
+    ,TrainingPlanPart "Corpus" SwimmingPool25m [
+      TrainingPlanExercise (DYN (DistanceExercise 25 (createDurationFromSec 30) (createDurationFromSec 30))) "First 16x25" 16
+      , TrainingPlanExercise(Rest (RestExercise (createDurationFromMin 2))) "" 1
+      ,TrainingPlanExercise (DYN (DistanceExercise 50 (createDurationFromSec 60) (createDurationFromSec 45))) "Second DYN" 1
+    ]
+
+    ,TrainingPlanPart "Debriefing" NoWater [
+      TrainingPlanExercise (Rest (RestExercise (createDurationFromMin 5))) "Session debrief" 1
+    ]
   ]
 
 
 viewTrainingPlan: TrainingPlan -> Html Msg
 viewTrainingPlan plan=
-div []
-  [ 
-      span [] [(text plan.name)]
-    , span [] [(text plan.group)]
-    , span [] [(text plan.author)]
-    , div [] (List.map viewTrainingPlanPart plan.parts)
-  ]
+  div [ class "plan" ]
+    [ 
+        span [] [(text plan.name)]
+      , span [] [(text plan.group)]
+      , span [] [(text plan.author)]
+      , div [ class "plan_part_list" ] (List.map viewTrainingPlanPart plan.parts)
+    ]
 
 viewTrainingPlanPart: TrainingPlanPart -> Html Msg
 viewTrainingPlanPart part=
-  div []
+  div [ class "plan_part"]
   [
     span [] [(text part.name)]
 
@@ -47,13 +90,13 @@ viewTrainingPlanPart part=
         DeepPool ->
           span [] [(text "Fosse")]
               
-    , div [] (List.map viewTrainingPlanExercise part.exercises)
+    , div [ class "plan_part_exercise_list"] (List.map viewTrainingPlanExercise part.exercises)
   ]
 
 
 viewTrainingPlanExercise: TrainingPlanExercise -> Html Msg
 viewTrainingPlanExercise exo =
-  div []
+  div [ class "plan_part_exercise"]
   [
       span [] [(text exo.comment)]
     , span [] [(text ("Repeat: " ++ (toString exo.repeat)))]
@@ -82,20 +125,6 @@ viewTrainingPlanExercise exo =
       VWT cat ->
         viewDepthExercise cat
       
-      Breath cat ->
-        viewDurationExercise cat
-      Exhale cat ->
-        viewDurationExercise cat
-      Hold cat ->
-        viewDurationExercise cat
-
-      
-      DYN_STA cat ->
-        ()
-      STA_DYN cat ->
-        ()
-      STA_DYN_STA cat ->
-        ()
       _ ->
         span [] [(text "Unkown")]
 

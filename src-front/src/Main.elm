@@ -7,10 +7,11 @@ import Html.Events exposing (onInput)
 import Json.Decode exposing (string)
 
 import TrainingPlan exposing (..)
-import TrainingPlanHelper exposing (createNewTrainingPlan)
+import TrainingPlanHelper exposing (..)
 
 
 -- MAIN
+main : Program () Model Msg
 main =
   Browser.sandbox { init = init, update = update, view = view }
 
@@ -21,16 +22,13 @@ type alias Model =
     plan: TrainingPlan
   }
 
-
 init : Model
 init =
-  Model (createNewTrainingPlan "default_name" "default_author" "default_group")
+  Model (createDefaultTrainingPlan "default_name" "default_author" "default_group")
 
 
 -- UPDATE
 
-type Msg
-  = Name String
 
 update : Msg -> Model -> Model
 update msg model =
@@ -43,12 +41,9 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  div []
+  div [ class "main" ]
     [ 
-      viewInput "text" "Name" model.name Name
-    , viewInput "password" "Password" model.password Password
-    , viewInput "password" "Re-enter Password" model.passwordAgain PasswordAgain
-    , viewValidation model
+      (viewTrainingPlan model.plan)
     ]
 
 
@@ -59,7 +54,4 @@ viewInput t p v toMsg =
 
 viewValidation : Model -> Html msg
 viewValidation model =
-  if model.password == model.passwordAgain then
-    div [ style "color" "green" ] [ text "OK" ]
-  else
     div [ style "color" "red" ] [ text "Passwords do not match!" ]

@@ -25,6 +25,11 @@ type alias TrainingPlanExercise =
     , repeat : Int
   }
 
+type alias Duration =
+  { 
+    min: Int, 
+    sec: Int
+  }
 
 type ExerciseLocation =
   NoWater
@@ -34,17 +39,19 @@ type ExerciseLocation =
   | DeepPool
 
 type alias RestExercise =
-  { rest: Int}
+  { rest: Duration}
 
 type alias DurationExercise =
-  { duration: Int, rest: Int }
+  { duration: Duration, rest: Duration }
 
 type alias DistanceExercise =
-  { distance: Int, duration: Int, rest: Int }
+  { distance: Int, duration: Duration, rest: Duration }
 
 type alias DepthExercise =
-  { depth: Int, duration: Int, rest: Int }
+  { depth: Int, duration: Duration, rest: Duration }
 
+type alias SquarredExercise =
+  { inspire:Duration, hold:Duration, expire:Duration, hold_empty: Duration}
 
 type ExerciseCategory =
   Unknown
@@ -65,8 +72,5 @@ type ExerciseCategory =
   | FIM DepthExercise
   | VWT DepthExercise
 
-
-  | Breath DurationExercise
-  | Exhale DurationExercise
-  | Hold DurationExercise
+  | Squarred SquarredExercise
 
