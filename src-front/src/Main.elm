@@ -6,7 +6,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import Json.Decode exposing (string)
 
-import TrainingPlanModel exposing (..)
+import TrainingPlan exposing (..)
+import TrainingPlanHelper exposing (createNewTrainingPlan)
 
 
 -- MAIN
@@ -16,46 +17,35 @@ main =
 
 -- MODEL
 type alias Model =
-  { name : String
-  , password : String
-  , passwordAgain : String
+  { 
+    plan: TrainingPlan
   }
 
 
 init : Model
 init =
-  Model "" "" ""
+  Model (createNewTrainingPlan "default_name" "default_author" "default_group")
 
 
 -- UPDATE
 
 type Msg
   = Name String
-  | Password String
-  | PasswordAgain String
-
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
-    Name name ->
-      { model | name = name }
-
-    Password password ->
-      { model | password = password }
-
-    PasswordAgain password ->
-      { model | passwordAgain = password }
-
+    _ ->
+      model
 
 
 -- VIEW
 
-
 view : Model -> Html Msg
 view model =
   div []
-    [ viewInput "text" "Name" model.name Name
+    [ 
+      viewInput "text" "Name" model.name Name
     , viewInput "password" "Password" model.password Password
     , viewInput "password" "Re-enter Password" model.passwordAgain PasswordAgain
     , viewValidation model
