@@ -2,8 +2,6 @@ module TrainingPlanView exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onInput)
-
 
 import TrainingPlan exposing(..)
 import TrainingPlanHelper exposing (..)
@@ -26,20 +24,11 @@ viewTrainingPlanPart part=
   div [ class "plan_part"]
   [
     span [] [(text part.name)]
-
-    , -- Change location rendering
-      case part.location of
-        NoWater ->
-          span [class "location"] [(text "Au sec")]
-        SwimmingPool25m ->
-          span [class "location"] [(text "Grand Bain (25m)")]
-        SwimmingPool50m ->
-          span [class "location"] [(text "Grand Bain (50m)")]
-        SmallPool ->
-          span [class "location"] [(text "Petit bain")]
-        DeepPool ->
-          span [class "location"] [(text "Fosse")]
-              
+    , span [class "location"] [(text (formatExerciseLocation part.location))]              
+    , span [class "final_duration"] [text ("Durée totale : " ++ (
+      formatDuration (concatDuration (List.map Duration.calculateTotalExerciseDuration part.exercises))
+      )
+    )]              
     , div [ class "plan_part_exercise_list"] (List.map viewTrainingPlanExercise part.exercises)
   ]
 
@@ -48,67 +37,116 @@ viewTrainingPlanExercise: TrainingPlanExercise -> Html Msg
 viewTrainingPlanExercise exo =
   div [ class "plan_part_exercise"]
   [
-    case exo.category of
-      Rest cat ->
-        viewRestExercise cat
-      Swim cat ->
-        viewDistanceExercise "Swim" cat
-      DYN cat ->
-        viewDistanceExercise "DYN" cat
-      DNF cat ->
-        viewDistanceExercise "DNF" cat
-
-      STA cat ->
-        viewDurationExercise "STA" cat
-      Dry cat ->
-        viewDurationExercise "Dry" cat
-
-      CWT cat ->
-        viewDepthExercise "CWT" cat
-      CNF cat ->
-        viewDepthExercise "CNF" cat
-      FIM cat ->
-        viewDepthExercise "FIM" cat
-      VWT cat ->
-        viewDepthExercise "VWT" cat
-      
-      _ ->
-        span [] [(text "Unkown")]
-    , span [] [text (String.fromInt exo.repeat)]
+    span [] [text (formatExerciseFamily exo.family)]
+    , span [] [text ("Répétitions : " ++ (String.fromInt exo.repeat))]
     , span [] [text exo.comment]
-    , span [] [text (formatDuration (calculateTotalExerciseDuration exo))]
-  ]
+    , span [] [text ("Total : " ++ (formatDuration (calculateTotalExerciseDuration exo)))]
 
-
-viewRestExercise: RestExercise -> Html Msg
-viewRestExercise exo =
-  span [class "rest"] [
-    (text ("Rest: "++ (formatDuration exo.rest)))
-  ]
-
-viewDurationExercise: String -> DurationExercise -> Html Msg
-viewDurationExercise cat_name exo =
-  span [] [
-    (text (" Duration: "++ (formatDuration exo.duration)
-      ++ " Rest: "++ (formatDuration exo.rest)))
-  ]
-
-viewDistanceExercise: String -> DistanceExercise -> Html Msg
-viewDistanceExercise cat_name exo =
-  span [] [
-    (text ("Distance: "++ (formatDistance exo.distance) 
-      ++ " Duration: "++ (formatDuration exo.duration)
-      ++ " Rest: "++ (formatDuration exo.rest)))
-  ]
-
-viewDepthExercise: String -> DepthExercise -> Html Msg
-viewDepthExercise cat_name exo =
-  div []
-  [
-    span [] [ text cat_name]
-    ,span [] [
-      (text ("Depth: "++ (formatDistance exo.depth) 
-        ++ " Duration: "++ (formatDuration exo.duration)
-        ++ " Rest: "++ (formatDuration exo.rest)))
+    , div [ class "exercise_content"] [
+      case exo.family of
+        _ ->
+          viewGenericExercise exo
       ]
   ]
+
+
+viewGenericExercise: TrainingPlanExercise -> Html Msg
+viewGenericExercise exo =
+  span [] (
+    exo.parts
+        |> List.map viewGenericExerciseSubPart
+  )
+
+viewGenericExerciseSubPart: TrainingPlanExerciseSubPart -> Html Msg
+viewGenericExerciseSubPart exosubpart =
+  case exosubpart.kind of
+  Rest ->
+    span [] [(text ("Repos: "++ (formatDuration exosubpart.rest)))]
+
+  Dry ->
+    span [] [(text (
+      "Au sec durant: "++ (formatDuration exosubpart.duration)
+      ))]
+
+  Breath ->
+    span [] [(text (
+        "Inspiration: "++ (formatDuration exosubpart.duration)
+        ++ " Expiration: "++ (formatDuration exosubpart.rest)
+    ))]
+  
+  Swim ->
+    span [] [(text (
+        (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Distance: "++ (formatDistance exosubpart.distance) 
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+    ))]
+
+  DNF ->
+    span [] [(text (
+        (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Distance: "++ (formatDistance exosubpart.distance) 
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+
+    ))]
+
+  DYN ->
+    span [] [(text (
+        (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Distance: "++ (formatDistance exosubpart.distance) 
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+
+    ))]
+
+  STA ->
+    span [] [(text (
+       (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+
+    ))]
+
+  CNF ->
+    span [] [(text (
+        (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+
+    ))]
+
+  CWT ->
+    span [] [(text (
+        (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+
+    ))]
+
+  FIM ->
+    span [] [(text (
+        (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+    ))]
+
+  VWT ->
+    span [] [(text (
+        (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+    ))]
+
+  _ ->
+    span [] [(text (
+        (formatExerciseCategory exosubpart.kind) ++ " : "
+        ++ " Distance: "++ (formatDistance exosubpart.distance) 
+        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
+        ++ " Durée: "++ (formatDuration exosubpart.duration)
+        ++ " Repos: "++ (formatDuration exosubpart.rest)
+        ))]

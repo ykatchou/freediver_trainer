@@ -4438,54 +4438,42 @@ var $elm$core$Set$toList = function (_v0) {
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
-var $author$project$TrainingPlan$DYN = function (a) {
-	return {$: 'DYN', a: a};
-};
-var $author$project$TrainingPlan$DistanceExercise = F3(
-	function (distance, duration, rest) {
-		return {distance: distance, duration: duration, rest: rest};
-	});
+var $author$project$TrainingPlan$Break = {$: 'Break'};
+var $author$project$TrainingPlan$DYN = {$: 'DYN'};
+var $author$project$TrainingPlan$Distance = {$: 'Distance'};
 var $author$project$TrainingPlan$NoWater = {$: 'NoWater'};
-var $author$project$TrainingPlan$Rest = function (a) {
-	return {$: 'Rest', a: a};
-};
-var $author$project$TrainingPlan$RestExercise = function (rest) {
-	return {rest: rest};
-};
-var $author$project$TrainingPlan$Squarred = function (a) {
-	return {$: 'Squarred', a: a};
-};
-var $author$project$TrainingPlan$SquarredExercise = F4(
-	function (inspire, hold, expire, hold_empty) {
-		return {expire: expire, hold: hold, hold_empty: hold_empty, inspire: inspire};
-	});
+var $author$project$TrainingPlan$Rest = {$: 'Rest'};
+var $author$project$TrainingPlan$Swim = {$: 'Swim'};
 var $author$project$TrainingPlan$SwimmingPool25m = {$: 'SwimmingPool25m'};
 var $author$project$TrainingPlan$TrainingPlan = F5(
 	function (name, author, lastchangedate, group, parts) {
 		return {author: author, group: group, lastchangedate: lastchangedate, name: name, parts: parts};
 	});
-var $author$project$TrainingPlan$TrainingPlanExercise = F3(
-	function (category, comment, repeat) {
-		return {category: category, comment: comment, repeat: repeat};
+var $author$project$TrainingPlan$TrainingPlanExercise = F5(
+	function (family, name, comment, repeat, parts) {
+		return {comment: comment, family: family, name: name, parts: parts, repeat: repeat};
+	});
+var $author$project$TrainingPlan$TrainingPlanExerciseSubPart = F5(
+	function (kind, distance, depth, duration, rest) {
+		return {depth: depth, distance: distance, duration: duration, kind: kind, rest: rest};
 	});
 var $author$project$TrainingPlan$TrainingPlanPart = F3(
 	function (name, location, exercises) {
 		return {exercises: exercises, location: location, name: name};
 	});
-var $author$project$TrainingPlan$Unknown = {$: 'Unknown'};
-var $author$project$TrainingPlan$Duration = F2(
+var $author$project$TrainingPlan$Timer = F2(
 	function (min, sec) {
 		return {min: min, sec: sec};
 	});
 var $author$project$Duration$createDurationFromMin = function (m) {
-	return A2($author$project$TrainingPlan$Duration, m, 0);
+	return A2($author$project$TrainingPlan$Timer, m, 0);
 };
 var $elm$core$Basics$idiv = _Basics_idiv;
 var $elm$core$Basics$mul = _Basics_mul;
 var $elm$core$Basics$sub = _Basics_sub;
 var $author$project$Duration$createDurationFromSec = function (secs) {
 	var m = (secs / 60) | 0;
-	return A2($author$project$TrainingPlan$Duration, m, secs - (m * 60));
+	return A2($author$project$TrainingPlan$Timer, m, secs - (m * 60));
 };
 var $author$project$TrainingPlanHelper$createDefaultTrainingPlan = F3(
 	function (name, author, group) {
@@ -4503,52 +4491,219 @@ var $author$project$TrainingPlanHelper$createDefaultTrainingPlan = F3(
 					$author$project$TrainingPlan$NoWater,
 					_List_fromArray(
 						[
-							A3($author$project$TrainingPlan$TrainingPlanExercise, $author$project$TrainingPlan$Unknown, 'Session explanations', 0),
-							A3(
+							A5(
 							$author$project$TrainingPlan$TrainingPlanExercise,
-							$author$project$TrainingPlan$Squarred(
-								A4(
-									$author$project$TrainingPlan$SquarredExercise,
-									$author$project$Duration$createDurationFromSec(15),
-									$author$project$Duration$createDurationFromSec(15),
-									$author$project$Duration$createDurationFromSec(15),
-									$author$project$Duration$createDurationFromSec(15))),
-							'Squarred',
-							4)
+							$author$project$TrainingPlan$Break,
+							'Session explanations',
+							'',
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$Rest,
+									0,
+									0,
+									$author$project$Duration$createDurationFromMin(0),
+									$author$project$Duration$createDurationFromMin(5))
+								]))
 						])),
 					A3(
 					$author$project$TrainingPlan$TrainingPlanPart,
-					'Corpus',
+					'Échauffement',
 					$author$project$TrainingPlan$SwimmingPool25m,
 					_List_fromArray(
 						[
-							A3(
+							A5(
 							$author$project$TrainingPlan$TrainingPlanExercise,
-							$author$project$TrainingPlan$DYN(
-								A3(
-									$author$project$TrainingPlan$DistanceExercise,
-									25,
-									$author$project$Duration$createDurationFromSec(30),
-									$author$project$Duration$createDurationFromSec(30))),
-							'First 16x25',
-							16),
-							A3(
-							$author$project$TrainingPlan$TrainingPlanExercise,
-							$author$project$TrainingPlan$Rest(
-								$author$project$TrainingPlan$RestExercise(
-									$author$project$Duration$createDurationFromMin(2))),
+							$author$project$TrainingPlan$Distance,
+							'400m nage',
 							'',
-							1),
-							A3(
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$Swim,
+									400,
+									0,
+									$author$project$Duration$createDurationFromMin(10),
+									$author$project$Duration$createDurationFromSec(0))
+								])),
+							A5(
 							$author$project$TrainingPlan$TrainingPlanExercise,
-							$author$project$TrainingPlan$DYN(
-								A3(
-									$author$project$TrainingPlan$DistanceExercise,
+							$author$project$TrainingPlan$Break,
+							'Récup',
+							'',
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$Rest,
+									0,
+									0,
+									$author$project$Duration$createDurationFromSec(0),
+									$author$project$Duration$createDurationFromMin(2))
+								])),
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Distance,
+							'Tranquille',
+							'',
+							4,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$DYN,
+									25,
+									0,
+									$author$project$Duration$createDurationFromSec(30),
+									$author$project$Duration$createDurationFromSec(30))
+								])),
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Break,
+							'Récup',
+							'',
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$Rest,
+									0,
+									0,
+									$author$project$Duration$createDurationFromSec(0),
+									$author$project$Duration$createDurationFromMin(2))
+								]))
+						])),
+					A3(
+					$author$project$TrainingPlan$TrainingPlanPart,
+					'Corps de l’entrainement',
+					$author$project$TrainingPlan$SwimmingPool25m,
+					_List_fromArray(
+						[
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Distance,
+							'First 16x25',
+							'',
+							16,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$DYN,
+									25,
+									0,
+									$author$project$Duration$createDurationFromSec(30),
+									$author$project$Duration$createDurationFromSec(30))
+								])),
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Break,
+							'Récup',
+							'',
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$Rest,
+									0,
+									0,
+									$author$project$Duration$createDurationFromSec(0),
+									$author$project$Duration$createDurationFromMin(2))
+								])),
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Distance,
+							'4x50 départ 2min',
+							'',
+							4,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$DYN,
 									50,
-									$author$project$Duration$createDurationFromSec(60),
-									$author$project$Duration$createDurationFromSec(45))),
-							'Second DYN',
-							1)
+									0,
+									$author$project$Duration$createDurationFromMin(1),
+									$author$project$Duration$createDurationFromSec(50))
+								])),
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Break,
+							'Récup',
+							'',
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$Rest,
+									0,
+									0,
+									$author$project$Duration$createDurationFromSec(0),
+									$author$project$Duration$createDurationFromMin(5))
+								]))
+						])),
+					A3(
+					$author$project$TrainingPlan$TrainingPlanPart,
+					'Récupération',
+					$author$project$TrainingPlan$SwimmingPool25m,
+					_List_fromArray(
+						[
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Distance,
+							'4x25m lent',
+							'',
+							4,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$DYN,
+									25,
+									0,
+									$author$project$Duration$createDurationFromSec(45),
+									$author$project$Duration$createDurationFromSec(60))
+								])),
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Break,
+							'Récup',
+							'',
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$Rest,
+									0,
+									0,
+									$author$project$Duration$createDurationFromSec(0),
+									$author$project$Duration$createDurationFromMin(1))
+								])),
+							A5(
+							$author$project$TrainingPlan$TrainingPlanExercise,
+							$author$project$TrainingPlan$Distance,
+							'200m detente',
+							'',
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$DYN,
+									200,
+									0,
+									$author$project$Duration$createDurationFromMin(3),
+									$author$project$Duration$createDurationFromMin(2))
+								]))
 						])),
 					A3(
 					$author$project$TrainingPlan$TrainingPlanPart,
@@ -4556,13 +4711,22 @@ var $author$project$TrainingPlanHelper$createDefaultTrainingPlan = F3(
 					$author$project$TrainingPlan$NoWater,
 					_List_fromArray(
 						[
-							A3(
+							A5(
 							$author$project$TrainingPlan$TrainingPlanExercise,
-							$author$project$TrainingPlan$Rest(
-								$author$project$TrainingPlan$RestExercise(
-									$author$project$Duration$createDurationFromMin(5))),
+							$author$project$TrainingPlan$Break,
 							'Session debrief',
-							1)
+							'',
+							1,
+							_List_fromArray(
+								[
+									A5(
+									$author$project$TrainingPlan$TrainingPlanExerciseSubPart,
+									$author$project$TrainingPlan$Rest,
+									0,
+									0,
+									$author$project$Duration$createDurationFromMin(0),
+									$author$project$Duration$createDurationFromMin(3))
+								]))
 						]))
 				]));
 	});
@@ -5315,133 +5479,209 @@ var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $author$project$Duration$getsecondsFromDuration = function (dur) {
 	return (dur.min * 60) + dur.sec;
 };
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $author$project$Duration$concatDuration = function (list_timer) {
+	return $author$project$Duration$createDurationFromSec(
+		$elm$core$List$sum(
+			A2($elm$core$List$map, $author$project$Duration$getsecondsFromDuration, list_timer)));
+};
+var $author$project$Duration$calculateExerciseSubPartDuration = function (subpart) {
+	return $author$project$Duration$concatDuration(
+		_List_fromArray(
+			[subpart.duration, subpart.rest]));
+};
 var $author$project$Duration$calculateTotalExerciseDuration = function (exo) {
-	var _v0 = exo.category;
-	switch (_v0.$) {
-		case 'Rest':
-			var re = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				$author$project$Duration$getsecondsFromDuration(re.rest) * exo.repeat);
-		case 'Swim':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'DYN':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'DNF':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'DYN_STA':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				((($author$project$Duration$getsecondsFromDuration(de.dyn.duration) + $author$project$Duration$getsecondsFromDuration(de.dyn.rest)) + $author$project$Duration$getsecondsFromDuration(de.sta_final.duration)) + $author$project$Duration$getsecondsFromDuration(de.sta_final.rest)) * exo.repeat);
-		case 'STA_DYN':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				((($author$project$Duration$getsecondsFromDuration(de.sta_initial.duration) + $author$project$Duration$getsecondsFromDuration(de.sta_initial.rest)) + $author$project$Duration$getsecondsFromDuration(de.dyn.duration)) + $author$project$Duration$getsecondsFromDuration(de.dyn.rest)) * exo.repeat);
-		case 'STA_DYN_STA':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				((((($author$project$Duration$getsecondsFromDuration(de.sta_initial.duration) + $author$project$Duration$getsecondsFromDuration(de.sta_initial.rest)) + $author$project$Duration$getsecondsFromDuration(de.dyn.duration)) + $author$project$Duration$getsecondsFromDuration(de.dyn.rest)) + $author$project$Duration$getsecondsFromDuration(de.sta_final.duration)) + $author$project$Duration$getsecondsFromDuration(de.sta_final.rest)) * exo.repeat);
-		case 'STA':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'Dry':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'CWT':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'CNF':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'FIM':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'VWT':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				($author$project$Duration$getsecondsFromDuration(de.duration) + $author$project$Duration$getsecondsFromDuration(de.rest)) * exo.repeat);
-		case 'Squarred':
-			var de = _v0.a;
-			return $author$project$Duration$createDurationFromSec(
-				((($author$project$Duration$getsecondsFromDuration(de.inspire) + $author$project$Duration$getsecondsFromDuration(de.hold)) + $author$project$Duration$getsecondsFromDuration(de.expire)) + $author$project$Duration$getsecondsFromDuration(de.hold_empty)) * exo.repeat);
-		default:
-			return $author$project$Duration$createDurationFromSec(0);
-	}
+	var final_timer = $author$project$Duration$concatDuration(
+		A2($elm$core$List$map, $author$project$Duration$calculateExerciseSubPartDuration, exo.parts));
+	return $author$project$Duration$createDurationFromSec(
+		$author$project$Duration$getsecondsFromDuration(final_timer) * exo.repeat);
 };
 var $author$project$Duration$formatDuration = function (dur) {
 	return (dur.min > 0) ? ((dur.sec > 0) ? ($elm$core$String$fromInt(dur.min) + ('min ' + ($elm$core$String$fromInt(dur.sec) + 'sec'))) : ($elm$core$String$fromInt(dur.min) + 'min ')) : ($elm$core$String$fromInt(dur.sec) + 'sec');
 };
+var $author$project$TrainingPlanHelper$formatExerciseLocation = function (exo) {
+	switch (exo.$) {
+		case 'NoWater':
+			return 'Au sec';
+		case 'SwimmingPool25m':
+			return 'Bassin de 25m';
+		case 'SwimmingPool50m':
+			return 'Bassin de 50';
+		case 'SmallPool':
+			return 'Petit bain';
+		default:
+			return 'Bassin profond / milieu naturel';
+	}
+};
+var $author$project$TrainingPlanHelper$formatExerciseFamily = function (exo) {
+	switch (exo.$) {
+		case 'Unknown':
+			return 'Autre';
+		case 'Break':
+			return 'Repos';
+		case 'Duration':
+			return 'Durée';
+		case 'Distance':
+			return 'Distance';
+		case 'Depth':
+			return 'Profondeur';
+		case 'Relaxation':
+			return 'Relaxation';
+		default:
+			return 'Composite';
+	}
+};
 var $author$project$TrainingPlanHelper$formatDistance = function (dist) {
 	return $elm$core$String$fromInt(dist) + 'm';
 };
-var $author$project$TrainingPlanView$viewDepthExercise = F2(
-	function (cat_name, exo) {
-		return A2(
-			$elm$html$Html$div,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$span,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text(cat_name)
-						])),
-					A2(
-					$elm$html$Html$span,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text(
-							'Depth: ' + ($author$project$TrainingPlanHelper$formatDistance(exo.depth) + (' Duration: ' + ($author$project$Duration$formatDuration(exo.duration) + (' Rest: ' + $author$project$Duration$formatDuration(exo.rest))))))
-						]))
-				]));
-	});
-var $author$project$TrainingPlanView$viewDistanceExercise = F2(
-	function (cat_name, exo) {
-		return A2(
-			$elm$html$Html$span,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text(
-					'Distance: ' + ($author$project$TrainingPlanHelper$formatDistance(exo.distance) + (' Duration: ' + ($author$project$Duration$formatDuration(exo.duration) + (' Rest: ' + $author$project$Duration$formatDuration(exo.rest))))))
-				]));
-	});
-var $author$project$TrainingPlanView$viewDurationExercise = F2(
-	function (cat_name, exo) {
-		return A2(
-			$elm$html$Html$span,
-			_List_Nil,
-			_List_fromArray(
-				[
-					$elm$html$Html$text(
-					' Duration: ' + ($author$project$Duration$formatDuration(exo.duration) + (' Rest: ' + $author$project$Duration$formatDuration(exo.rest))))
-				]));
-	});
-var $author$project$TrainingPlanView$viewRestExercise = function (exo) {
+var $author$project$TrainingPlanHelper$formatExerciseCategory = function (exo) {
+	switch (exo.$) {
+		case 'Custom':
+			return 'Personalisé';
+		case 'Rest':
+			return 'Repos';
+		case 'Dry':
+			return 'Au sec';
+		case 'Breath':
+			return 'Respiration';
+		case 'Swim':
+			return 'Nage';
+		case 'DNF':
+			return 'Dynamique SANS palme';
+		case 'DYN':
+			return 'Dynamique';
+		case 'STA':
+			return 'Statique';
+		case 'CNF':
+			return 'Poids constant SANS palme';
+		case 'CWT':
+			return 'Poids constant';
+		case 'FIM':
+			return 'Immersion libre';
+		default:
+			return 'Poids variable';
+	}
+};
+var $author$project$TrainingPlanView$viewGenericExerciseSubPart = function (exosubpart) {
+	var _v0 = exosubpart.kind;
+	switch (_v0.$) {
+		case 'Rest':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						'Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))
+					]));
+		case 'Dry':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						'Au sec durant: ' + $author$project$Duration$formatDuration(exosubpart.duration))
+					]));
+		case 'Breath':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						'Inspiration: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Expiration: ' + $author$project$Duration$formatDuration(exosubpart.rest))))
+					]));
+		case 'Swim':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Distance: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.distance) + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))))
+					]));
+		case 'DNF':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Distance: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.distance) + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))))
+					]));
+		case 'DYN':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Distance: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.distance) + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))))
+					]));
+		case 'STA':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))
+					]));
+		case 'CNF':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Profondeur: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.depth) + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))))
+					]));
+		case 'CWT':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Profondeur: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.depth) + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))))
+					]));
+		case 'FIM':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Profondeur: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.depth) + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))))
+					]));
+		case 'VWT':
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Profondeur: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.depth) + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))))
+					]));
+		default:
+			return A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind) + (' : ' + (' Distance: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.distance) + (' Profondeur: ' + ($author$project$TrainingPlanHelper$formatDistance(exosubpart.depth) + (' Durée: ' + ($author$project$Duration$formatDuration(exosubpart.duration) + (' Repos: ' + $author$project$Duration$formatDuration(exosubpart.rest))))))))))
+					]));
+	}
+};
+var $author$project$TrainingPlanView$viewGenericExercise = function (exo) {
 	return A2(
 		$elm$html$Html$span,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('rest')
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text(
-				'Rest: ' + $author$project$Duration$formatDuration(exo.rest))
-			]));
+		_List_Nil,
+		A2($elm$core$List$map, $author$project$TrainingPlanView$viewGenericExerciseSubPart, exo.parts));
 };
 var $author$project$TrainingPlanView$viewTrainingPlanExercise = function (exo) {
 	return A2(
@@ -5452,56 +5692,21 @@ var $author$project$TrainingPlanView$viewTrainingPlanExercise = function (exo) {
 			]),
 		_List_fromArray(
 			[
-				function () {
-				var _v0 = exo.category;
-				switch (_v0.$) {
-					case 'Rest':
-						var cat = _v0.a;
-						return $author$project$TrainingPlanView$viewRestExercise(cat);
-					case 'Swim':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDistanceExercise, 'Swim', cat);
-					case 'DYN':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDistanceExercise, 'DYN', cat);
-					case 'DNF':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDistanceExercise, 'DNF', cat);
-					case 'STA':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDurationExercise, 'STA', cat);
-					case 'Dry':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDurationExercise, 'Dry', cat);
-					case 'CWT':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDepthExercise, 'CWT', cat);
-					case 'CNF':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDepthExercise, 'CNF', cat);
-					case 'FIM':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDepthExercise, 'FIM', cat);
-					case 'VWT':
-						var cat = _v0.a;
-						return A2($author$project$TrainingPlanView$viewDepthExercise, 'VWT', cat);
-					default:
-						return A2(
-							$elm$html$Html$span,
-							_List_Nil,
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Unkown')
-								]));
-				}
-			}(),
 				A2(
 				$elm$html$Html$span,
 				_List_Nil,
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						$elm$core$String$fromInt(exo.repeat))
+						$author$project$TrainingPlanHelper$formatExerciseFamily(exo.family))
+					])),
+				A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						'Répétitions : ' + $elm$core$String$fromInt(exo.repeat))
 					])),
 				A2(
 				$elm$html$Html$span,
@@ -5516,8 +5721,21 @@ var $author$project$TrainingPlanView$viewTrainingPlanExercise = function (exo) {
 				_List_fromArray(
 					[
 						$elm$html$Html$text(
-						$author$project$Duration$formatDuration(
+						'Total : ' + $author$project$Duration$formatDuration(
 							$author$project$Duration$calculateTotalExerciseDuration(exo)))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('exercise_content')
+					]),
+				_List_fromArray(
+					[
+						function () {
+						var _v0 = exo.family;
+						return $author$project$TrainingPlanView$viewGenericExercise(exo);
+					}()
 					]))
 			]));
 };
@@ -5537,66 +5755,30 @@ var $author$project$TrainingPlanView$viewTrainingPlanPart = function (part) {
 					[
 						$elm$html$Html$text(part.name)
 					])),
-				function () {
-				var _v0 = part.location;
-				switch (_v0.$) {
-					case 'NoWater':
-						return A2(
-							$elm$html$Html$span,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('location')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Au sec')
-								]));
-					case 'SwimmingPool25m':
-						return A2(
-							$elm$html$Html$span,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('location')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Grand Bain (25m)')
-								]));
-					case 'SwimmingPool50m':
-						return A2(
-							$elm$html$Html$span,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('location')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Grand Bain (50m)')
-								]));
-					case 'SmallPool':
-						return A2(
-							$elm$html$Html$span,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('location')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Petit bain')
-								]));
-					default:
-						return A2(
-							$elm$html$Html$span,
-							_List_fromArray(
-								[
-									$elm$html$Html$Attributes$class('location')
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('Fosse')
-								]));
-				}
-			}(),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('location')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						$author$project$TrainingPlanHelper$formatExerciseLocation(part.location))
+					])),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('final_duration')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(
+						'Durée totale : ' + $author$project$Duration$formatDuration(
+							$author$project$Duration$concatDuration(
+								A2($elm$core$List$map, $author$project$Duration$calculateTotalExerciseDuration, part.exercises))))
+					])),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(

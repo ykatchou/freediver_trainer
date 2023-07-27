@@ -2,3 +2,4 @@ target
 0.19.1
 /src-back/Cargo.lock
 .vscode
+src-front/elm-stuff/generated-code

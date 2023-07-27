@@ -2,74 +2,43 @@ module Duration exposing (..)
 
 import TrainingPlan exposing(..)
 
-createDurationFromSec: Int -> Duration
+createDurationFromSec: Int -> Timer
 createDurationFromSec secs =
   let m = secs // 60
   in
-    Duration m ( secs - (m*60) )
+    Timer m ( secs - (m*60) )
 
-createDurationFromMin: Int -> Duration
+createDurationFromMin: Int -> Timer
 createDurationFromMin m=
-    Duration m 0
+    Timer m 0
 
-getsecondsFromDuration: Duration -> Int
+getsecondsFromDuration: Timer -> Int
 getsecondsFromDuration dur=
   (dur.min*60)+dur.sec
 
-calculateTotalExerciseDuration: TrainingPlanExercise -> Duration
+concatDuration: List Timer -> Timer
+concatDuration list_timer =
+  createDurationFromSec (
+    list_timer
+      |> List.map getsecondsFromDuration
+      |> List.sum
+    )
+
+calculateExerciseSubPartDuration: TrainingPlanExerciseSubPart -> Timer
+calculateExerciseSubPartDuration subpart=
+  concatDuration [subpart.duration, subpart.rest]
+
+calculateTotalExerciseDuration: TrainingPlanExercise -> Timer
 calculateTotalExerciseDuration exo=
-  case exo.category of
-    Rest re ->
-      createDurationFromSec ((getsecondsFromDuration re.rest) * exo.repeat)
-    Swim de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
-    DYN de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
-    DNF de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
+  let 
+    final_timer = 
+      exo.parts
+        |> List.map calculateExerciseSubPartDuration
+        |> concatDuration
+  in
+    createDurationFromSec ((getsecondsFromDuration final_timer) * exo.repeat)
 
-    DYN_STA de ->
-      createDurationFromSec ((
-        getsecondsFromDuration de.dyn.duration + getsecondsFromDuration de.dyn.rest
-        + getsecondsFromDuration de.sta_final.duration + getsecondsFromDuration de.sta_final.rest
-      )*exo.repeat)
-    STA_DYN de ->
-      createDurationFromSec ((
-        getsecondsFromDuration de.sta_initial.duration + getsecondsFromDuration de.sta_initial.rest
-        + getsecondsFromDuration de.dyn.duration + getsecondsFromDuration de.dyn.rest
-      )*exo.repeat)    
-    STA_DYN_STA de ->
-      createDurationFromSec ((
-        getsecondsFromDuration de.sta_initial.duration + getsecondsFromDuration de.sta_initial.rest
-        + getsecondsFromDuration de.dyn.duration + getsecondsFromDuration de.dyn.rest
-        + getsecondsFromDuration de.sta_final.duration + getsecondsFromDuration de.sta_final.rest
-      )*exo.repeat)
-
-    STA de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
-    Dry de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
-
-    CWT de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
-    CNF de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
-    FIM de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
-    VWT de ->
-      createDurationFromSec ((getsecondsFromDuration de.duration + getsecondsFromDuration de.rest)*exo.repeat)
-
-    Squarred de ->
-      createDurationFromSec ((getsecondsFromDuration de.inspire
-        + getsecondsFromDuration de.hold
-        + getsecondsFromDuration de.expire
-        + getsecondsFromDuration de.hold_empty
-        )*exo.repeat)
-
-    _ ->
-      createDurationFromSec 0
-
-formatDuration: Duration -> String
+formatDuration: Timer -> String
 formatDuration dur=
     if dur.min > 0 then
         if dur.sec > 0 then
