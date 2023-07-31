@@ -6,6 +6,12 @@ import Duration exposing(..)
 type Msg
   = Name String
 
+formatRepeat: Int -> String
+formatRepeat rep =
+  if rep > 1 then
+    "x" ++ (String.fromInt rep)
+  else
+    ""
 
 formatDistance: Int -> String
 formatDistance dist=
@@ -24,13 +30,13 @@ formatExerciseLocation exo=
 formatExerciseFamily: ExerciseFamily -> String
 formatExerciseFamily exo=
   case exo of
-    Unknown -> "Autre"
-    Break -> "Repos"
-    Duration -> "Durée"
-    Distance -> "Distance"
-    Depth -> "Profondeur"
-    Relaxation -> "Relaxation"
-    Composite -> "Composite"
+    Unknown -> "ℹ"
+    Break -> "☕"
+    Duration -> "⏰"
+    Distance -> "↔"
+    Depth -> "↕"
+    Relaxation -> "🌅"
+    Composite -> "🎮"
 
 formatExerciseCategory: ExerciseCategory -> String
 formatExerciseCategory exo=

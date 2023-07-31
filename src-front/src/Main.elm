@@ -1,21 +1,19 @@
 module Main exposing(..)
-
-import Browser
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (onInput)
-import Json.Decode exposing (string)
+import Element exposing (Element, el, text, row, column, paragraph, alignRight, fill, width, rgb255, spacing, centerY, padding)
 
 import TrainingPlan exposing (..)
 import TrainingPlanHelper exposing (..)
 
 import ViewTrainingPlan exposing(..)
+import Element
+import Element exposing (height)
 
 
 -- MAIN
-main : Program () Model Msg
-main =
-  Browser.sandbox { init = init, update = update, view = view }
+main = 
+    Element.layout [
+      height fill
+    ] <| view init
 
 
 -- MODEL
@@ -39,19 +37,9 @@ update msg model =
 
 -- VIEW
 
-view : Model -> Html Msg
+view : Model -> Element Msg
 view model =
-  div [ class "main" ]
-    [ 
-      (viewTrainingPlan model.plan)
-    ]
-
-
-viewInput : String -> String -> String -> (String -> msg) -> Html msg
-viewInput t p v toMsg =
-  input [ type_ t, placeholder p, value v, onInput toMsg ] []
-
-
-viewValidation : Model -> Html msg
-viewValidation model =
-    div [ style "color" "red" ] [ text "Passwords do not match!" ]
+  row []
+  [
+    viewTrainingPlan model.plan
+  ]
