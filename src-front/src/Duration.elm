@@ -38,6 +38,28 @@ calculateTotalExerciseDuration exo=
   in
     createDurationFromSec ((getsecondsFromDuration final_timer) * exo.repeat)
 
+calculateTrainingPlanPartDuration: TrainingPlanPart -> Timer
+calculateTrainingPlanPartDuration exo=
+  let 
+    final_timer = 
+      exo.exercises
+        |> List.map calculateTotalExerciseDuration
+        |> concatDuration
+  in
+    createDurationFromSec (getsecondsFromDuration final_timer)
+
+
+calculateTrainingPlanDuration: TrainingPlan -> Timer
+calculateTrainingPlanDuration exo=
+  let 
+    final_timer = 
+      exo.parts
+        |> List.map calculateTrainingPlanPartDuration
+        |> concatDuration
+  in
+    createDurationFromSec (getsecondsFromDuration final_timer)
+
+
 formatDuration: Timer -> String
 formatDuration dur=
     if dur.min > 0 then

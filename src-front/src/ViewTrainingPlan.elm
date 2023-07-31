@@ -18,19 +18,23 @@ viewTrainingPlan plan =
         , Border.rounded 3
         , padding 20
         ]
-        [
-        row [padding 10]
+        [ row [ padding 10 ]
             [ el [] (text ("Entrainement :" ++ plan.name))
             , el [] (text ("Groupe : " ++ plan.group))
+            , el []
+                (text
+                    ("Durée totale : "
+                        ++ formatDuration (Duration.calculateTrainingPlanDuration plan)
+                    )
+                )
             , el [] (text ("Moniteur : " ++ plan.author))
             ]
-        ,
-        -- Training plan part style 
-        column [
-            Border.width 2
+        , column
+            [ Border.width 2
             , Border.rounded 4
             , Border.color (rgb255 255 255 255)
-        ] (List.map viewTrainingPlanPart plan.parts)
+            ]
+            (List.map viewTrainingPlanPart plan.parts)
         ]
 
 
@@ -44,18 +48,13 @@ viewTrainingPlanPart part =
         , Border.rounded 3
         , padding 10
         ]
-        [
-        row []
-        [
-            el [] (text part.name)
+        [ row []
+            [ el [] (text part.name)
             , el [] (text (formatExerciseLocation part.location))
             , el []
-                (text
-                    ("Durée totale : "
-                        ++ formatDuration (concatDuration (List.map Duration.calculateTotalExerciseDuration part.exercises))
-                    )
-                )
+                (text ("Durée totale : " ++ formatDuration (calculateTrainingPlanPartDuration part)))
             ]
-        , column [
-        ] (List.map viewTrainingPlanExercise part.exercises)
+        , column
+            []
+            (List.map viewTrainingPlanExercise part.exercises)
         ]

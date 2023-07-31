@@ -25,7 +25,6 @@ viewTrainingPlanExercise exo =
     , el [
       padding 1
     ] (text exo.name)
-    --, el [] (text ("Total : " ++ (formatDuration (calculateTotalExerciseDuration exo))))
     , el [] (text exo.comment)
     , el [] (text (formatRepeat exo.repeat))
 

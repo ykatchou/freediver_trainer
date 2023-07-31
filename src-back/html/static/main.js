@@ -10735,6 +10735,40 @@ var $mdgriffith$elm_ui$Element$row = F2(
 						attrs))),
 			$mdgriffith$elm_ui$Internal$Model$Unkeyed(children));
 	});
+var $author$project$Duration$getsecondsFromDuration = function (dur) {
+	return (dur.min * 60) + dur.sec;
+};
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $author$project$Duration$concatDuration = function (list_timer) {
+	return $author$project$Duration$createDurationFromSec(
+		$elm$core$List$sum(
+			A2($elm$core$List$map, $author$project$Duration$getsecondsFromDuration, list_timer)));
+};
+var $author$project$Duration$calculateExerciseSubPartDuration = function (subpart) {
+	return $author$project$Duration$concatDuration(
+		_List_fromArray(
+			[subpart.duration, subpart.rest]));
+};
+var $author$project$Duration$calculateTotalExerciseDuration = function (exo) {
+	var final_timer = $author$project$Duration$concatDuration(
+		A2($elm$core$List$map, $author$project$Duration$calculateExerciseSubPartDuration, exo.parts));
+	return $author$project$Duration$createDurationFromSec(
+		$author$project$Duration$getsecondsFromDuration(final_timer) * exo.repeat);
+};
+var $author$project$Duration$calculateTrainingPlanPartDuration = function (exo) {
+	var final_timer = $author$project$Duration$concatDuration(
+		A2($elm$core$List$map, $author$project$Duration$calculateTotalExerciseDuration, exo.exercises));
+	return $author$project$Duration$createDurationFromSec(
+		$author$project$Duration$getsecondsFromDuration(final_timer));
+};
+var $author$project$Duration$calculateTrainingPlanDuration = function (exo) {
+	var final_timer = $author$project$Duration$concatDuration(
+		A2($elm$core$List$map, $author$project$Duration$calculateTrainingPlanPartDuration, exo.parts));
+	return $author$project$Duration$createDurationFromSec(
+		$author$project$Duration$getsecondsFromDuration(final_timer));
+};
 var $mdgriffith$elm_ui$Element$Background$color = function (clr) {
 	return A2(
 		$mdgriffith$elm_ui$Internal$Model$StyleClass,
@@ -10803,6 +10837,9 @@ var $mdgriffith$elm_ui$Element$el = F2(
 				_List_fromArray(
 					[child])));
 	});
+var $author$project$Duration$formatDuration = function (dur) {
+	return (dur.min > 0) ? ((dur.sec > 0) ? ($elm$core$String$fromInt(dur.min) + ('min ' + ($elm$core$String$fromInt(dur.sec) + 'sec'))) : ($elm$core$String$fromInt(dur.min) + 'min ')) : ($elm$core$String$fromInt(dur.sec) + 'sec');
+};
 var $mdgriffith$elm_ui$Internal$Model$PaddingStyle = F5(
 	function (a, b, c, d, e) {
 		return {$: 'PaddingStyle', a: a, b: b, c: c, d: d, e: e};
@@ -10841,31 +10878,6 @@ var $mdgriffith$elm_ui$Internal$Model$Text = function (a) {
 };
 var $mdgriffith$elm_ui$Element$text = function (content) {
 	return $mdgriffith$elm_ui$Internal$Model$Text(content);
-};
-var $author$project$Duration$getsecondsFromDuration = function (dur) {
-	return (dur.min * 60) + dur.sec;
-};
-var $elm$core$List$sum = function (numbers) {
-	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
-};
-var $author$project$Duration$concatDuration = function (list_timer) {
-	return $author$project$Duration$createDurationFromSec(
-		$elm$core$List$sum(
-			A2($elm$core$List$map, $author$project$Duration$getsecondsFromDuration, list_timer)));
-};
-var $author$project$Duration$calculateExerciseSubPartDuration = function (subpart) {
-	return $author$project$Duration$concatDuration(
-		_List_fromArray(
-			[subpart.duration, subpart.rest]));
-};
-var $author$project$Duration$calculateTotalExerciseDuration = function (exo) {
-	var final_timer = $author$project$Duration$concatDuration(
-		A2($elm$core$List$map, $author$project$Duration$calculateExerciseSubPartDuration, exo.parts));
-	return $author$project$Duration$createDurationFromSec(
-		$author$project$Duration$getsecondsFromDuration(final_timer) * exo.repeat);
-};
-var $author$project$Duration$formatDuration = function (dur) {
-	return (dur.min > 0) ? ((dur.sec > 0) ? ($elm$core$String$fromInt(dur.min) + ('min ' + ($elm$core$String$fromInt(dur.sec) + 'sec'))) : ($elm$core$String$fromInt(dur.min) + 'min ')) : ($elm$core$String$fromInt(dur.sec) + 'sec');
 };
 var $author$project$TrainingPlanHelper$formatExerciseLocation = function (exo) {
 	switch (exo.$) {
@@ -11123,8 +11135,7 @@ var $author$project$ViewTrainingPlan$viewTrainingPlanPart = function (part) {
 						_List_Nil,
 						$mdgriffith$elm_ui$Element$text(
 							'Durée totale : ' + $author$project$Duration$formatDuration(
-								$author$project$Duration$concatDuration(
-									A2($elm$core$List$map, $author$project$Duration$calculateTotalExerciseDuration, part.exercises)))))
+								$author$project$Duration$calculateTrainingPlanPartDuration(part))))
 					])),
 				A2(
 				$mdgriffith$elm_ui$Element$column,
@@ -11162,6 +11173,12 @@ var $author$project$ViewTrainingPlan$viewTrainingPlan = function (plan) {
 						$mdgriffith$elm_ui$Element$el,
 						_List_Nil,
 						$mdgriffith$elm_ui$Element$text('Groupe : ' + plan.group)),
+						A2(
+						$mdgriffith$elm_ui$Element$el,
+						_List_Nil,
+						$mdgriffith$elm_ui$Element$text(
+							'Durée totale : ' + $author$project$Duration$formatDuration(
+								$author$project$Duration$calculateTrainingPlanDuration(plan)))),
 						A2(
 						$mdgriffith$elm_ui$Element$el,
 						_List_Nil,
