@@ -8,7 +8,8 @@ import Json.Decode exposing (string)
 
 import TrainingPlan exposing (..)
 import TrainingPlanHelper exposing (..)
-import TrainingPlanView exposing(..)
+
+import ViewTrainingPlan exposing(..)
 
 
 -- MAIN

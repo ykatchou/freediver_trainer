@@ -5564,7 +5564,7 @@ var $author$project$TrainingPlanHelper$formatExerciseCategory = function (exo) {
 			return 'Poids variable';
 	}
 };
-var $author$project$TrainingPlanView$viewGenericExerciseSubPart = function (exosubpart) {
+var $author$project$ViewExercise$viewGenericExerciseSubPart = function (exosubpart) {
 	var _v0 = exosubpart.kind;
 	switch (_v0.$) {
 		case 'Rest':
@@ -5677,13 +5677,13 @@ var $author$project$TrainingPlanView$viewGenericExerciseSubPart = function (exos
 					]));
 	}
 };
-var $author$project$TrainingPlanView$viewGenericExercise = function (exo) {
+var $author$project$ViewExercise$viewGenericExercise = function (exo) {
 	return A2(
 		$elm$html$Html$span,
 		_List_Nil,
-		A2($elm$core$List$map, $author$project$TrainingPlanView$viewGenericExerciseSubPart, exo.parts));
+		A2($elm$core$List$map, $author$project$ViewExercise$viewGenericExerciseSubPart, exo.parts));
 };
-var $author$project$TrainingPlanView$viewTrainingPlanExercise = function (exo) {
+var $author$project$ViewExercise$viewTrainingPlanExercise = function (exo) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -5734,12 +5734,12 @@ var $author$project$TrainingPlanView$viewTrainingPlanExercise = function (exo) {
 					[
 						function () {
 						var _v0 = exo.family;
-						return $author$project$TrainingPlanView$viewGenericExercise(exo);
+						return $author$project$ViewExercise$viewGenericExercise(exo);
 					}()
 					]))
 			]));
 };
-var $author$project$TrainingPlanView$viewTrainingPlanPart = function (part) {
+var $author$project$ViewTrainingPlan$viewTrainingPlanPart = function (part) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -5785,10 +5785,10 @@ var $author$project$TrainingPlanView$viewTrainingPlanPart = function (part) {
 					[
 						$elm$html$Html$Attributes$class('plan_part_exercise_list')
 					]),
-				A2($elm$core$List$map, $author$project$TrainingPlanView$viewTrainingPlanExercise, part.exercises))
+				A2($elm$core$List$map, $author$project$ViewExercise$viewTrainingPlanExercise, part.exercises))
 			]));
 };
-var $author$project$TrainingPlanView$viewTrainingPlan = function (plan) {
+var $author$project$ViewTrainingPlan$viewTrainingPlan = function (plan) {
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -5833,7 +5833,7 @@ var $author$project$TrainingPlanView$viewTrainingPlan = function (plan) {
 					[
 						$elm$html$Html$Attributes$class('plan_part_list')
 					]),
-				A2($elm$core$List$map, $author$project$TrainingPlanView$viewTrainingPlanPart, plan.parts))
+				A2($elm$core$List$map, $author$project$ViewTrainingPlan$viewTrainingPlanPart, plan.parts))
 			]));
 };
 var $author$project$Main$view = function (model) {
@@ -5845,7 +5845,7 @@ var $author$project$Main$view = function (model) {
 			]),
 		_List_fromArray(
 			[
-				$author$project$TrainingPlanView$viewTrainingPlan(model.plan)
+				$author$project$ViewTrainingPlan$viewTrainingPlan(model.plan)
 			]));
 };
 var $author$project$Main$main = $elm$browser$Browser$sandbox(

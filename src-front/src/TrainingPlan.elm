@@ -1,6 +1,5 @@
 module TrainingPlan exposing (..)
 
-
 type ExerciseLocation =
   NoWater
   | SwimmingPool25m
