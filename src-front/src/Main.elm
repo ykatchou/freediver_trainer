@@ -1,4 +1,5 @@
 module Main exposing(..)
+import UtilsHelper exposing (..)
 import Element exposing (Element, el, text, row, column, paragraph, alignRight, fill, width, rgb255, spacing, centerY, padding)
 
 import TrainingPlan exposing (..)
@@ -7,7 +8,6 @@ import TrainingPlanHelper exposing (..)
 import ViewTrainingPlan exposing(..)
 import Element
 import Element exposing (height)
-
 
 -- MAIN
 main = 

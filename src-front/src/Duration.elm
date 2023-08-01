@@ -1,5 +1,4 @@
 module Duration exposing (..)
-
 import TrainingPlan exposing(..)
 
 createDurationFromSec: Int -> Timer
@@ -58,14 +57,3 @@ calculateTrainingPlanDuration exo=
         |> concatDuration
   in
     createDurationFromSec (getsecondsFromDuration final_timer)
-
-
-formatDuration: Timer -> String
-formatDuration dur=
-    if dur.min > 0 then
-        if dur.sec > 0 then
-            (String.fromInt dur.min) ++ "min " ++ (String.fromInt dur.sec) ++ "sec"
-        else
-            (String.fromInt dur.min) ++ "min "
-    else
-        (String.fromInt dur.sec) ++ "sec"

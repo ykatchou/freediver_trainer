@@ -1,39 +1,41 @@
 module ViewTrainingPlan exposing (..)
 
 import Duration exposing (..)
-import Element exposing (Element, alignRight, centerY, column, el, fill, padding, paragraph, rgb255, row, spacing, text, width)
+import Element exposing (Attribute, Color, Element, alignRight, centerY, column, el, fill, padding, paragraph, rgb255, row, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
+import StyleHelper exposing (..)
 import TrainingPlan exposing (..)
 import TrainingPlanHelper exposing (..)
+import UtilsHelper exposing (..)
 import ViewExercise exposing (..)
+
+
 
 
 viewTrainingPlan : TrainingPlan -> Element Msg
 viewTrainingPlan plan =
     column
-        [ Background.color (rgb255 0 0 230)
-        , Font.color (rgb255 0 0 0)
+        [ width fill
+        , Background.color white
+        , Font.color black
         , Border.rounded 3
-        , padding 20
+        , padding 1
         ]
-        [ row [ padding 10 ]
-            [ el [] (text ("Entrainement :" ++ plan.name))
-            , el [] (text ("Groupe : " ++ plan.group))
-            , el []
+        [ row [ padding 1 ]
+            [ el styleTextHeader (text ("Entrainement : " ++ plan.name))
+            , el styleTextHeader (text ("Groupe : " ++ plan.group))
+            , el styleTextHeader
                 (text
                     ("Durée totale : "
                         ++ formatDuration (Duration.calculateTrainingPlanDuration plan)
                     )
                 )
-            , el [] (text ("Moniteur : " ++ plan.author))
+            , el styleTextHeader (text ("Moniteur : " ++ plan.author))
             ]
         , column
-            [ Border.width 2
-            , Border.rounded 4
-            , Border.color (rgb255 255 255 255)
-            ]
+            [ spacing 5 ]
             (List.map viewTrainingPlanPart plan.parts)
         ]
 
@@ -41,20 +43,20 @@ viewTrainingPlan plan =
 viewTrainingPlanPart : TrainingPlanPart -> Element Msg
 viewTrainingPlanPart part =
     column
-        [ Background.color (rgb255 240 0 0)
-        , Font.color (rgb255 255 255 255)
-        , Border.color (rgb255 255 255 255)
+        [ Background.color white
+        , width fill
+        , Font.color mainColor
+        , Font.size 16
+        , Border.color mainColor
         , Border.width 2
-        , Border.rounded 3
-        , padding 10
+        , Border.rounded 5
         ]
         [ row []
-            [ el [] (text part.name)
-            , el [] (text (formatExerciseLocation part.location))
-            , el []
-                (text ("Durée totale : " ++ formatDuration (calculateTrainingPlanPartDuration part)))
+            [ el stylePartHeader (text part.name)
+            , el stylePartHeader (text (formatExerciseLocation part.location))
+            , el stylePartHeader (text (formatIfValueStr "(" (formatDuration (calculateTrainingPlanPartDuration part)) ")"))
             ]
         , column
-            []
+            [ width fill ]
             (List.map viewTrainingPlanExercise part.exercises)
         ]

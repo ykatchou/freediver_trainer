@@ -1,140 +1,103 @@
 module ViewExercise exposing (..)
 
-import Element exposing (Element, el, text, row, column, paragraph, alignRight, fill, width, rgb255, spacing, centerY, padding)
+import Duration exposing (..)
+import Element exposing (Color, Element, alignRight, centerY, column, el, fill, padding, paragraph, rgb255, row, spaceEvenly, spacing, text, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
-
-import TrainingPlan exposing(..)
+import StyleHelper exposing (..)
+import TrainingPlan exposing (..)
 import TrainingPlanHelper exposing (..)
-import Duration exposing(..)
-import Element exposing (Color)
+import UtilsHelper exposing (..)
 
-viewTrainingPlanExercise: TrainingPlanExercise -> Element Msg
+
+viewTrainingPlanExercise : TrainingPlanExercise -> Element Msg
 viewTrainingPlanExercise exo =
-  row [ 
-            padding 1
-            , Border.color (rgb255 0 255 0)
-            , Border.width 1
-            , Border.rounded 3
-   ]
-  [
-    el [
-      padding 1
-    ] (text (formatExerciseFamily exo.family))
-    , el [
-      padding 1
-    ] (text exo.name)
-    , el [] (text exo.comment)
-    , el [] (text (formatRepeat exo.repeat))
+    row
+        [ spacing 3
+        , padding 1
+        , width fill
+        ]
+        [ text (formatExerciseFamily exo.family)
+        , text exo.name
+        , text exo.comment
+        , el [ Font.bold ] (text (formatIfValue "x" exo.repeat ""))
+        , viewGenericExercise exo
+        ]
 
-    , column [  ] 
-      [
-      case exo.family of
-        _ ->
-          viewGenericExercise exo
-      ]
-  ]
 
-viewGenericExercise: TrainingPlanExercise -> Element Msg
+viewGenericExercise : TrainingPlanExercise -> Element Msg
 viewGenericExercise exo =
-  row [ Background.color <| rgb255 255 255 255 
-    , Font.color <| rgb255 0 0 0
-  ] (
-    exo.parts
-        |> List.map viewGenericExerciseSubPart
-  )
+    column
+        [ Background.color <| white
+        , Font.color <| secondColor
+        , Font.size 14
+        , width fill
+        , spacing 1
+        ]
+        (exo.parts
+            |> List.map viewGenericExerciseSubPart
+        )
 
-viewGenericExerciseSubPart: TrainingPlanExerciseSubPart -> Element Msg
+
+viewGenericExerciseSubPart : TrainingPlanExerciseSubPart -> Element Msg
 viewGenericExerciseSubPart exosubpart =
-  case exosubpart.kind of
-  Rest ->
-    el [] (text ("Repos: "++ (formatDuration exosubpart.rest)))
+    case exosubpart.kind of
+        Rest ->
+            displayRest exosubpart
 
-  Dry ->
-    el [] (text (
-      "Au sec durant: "++ (formatDuration exosubpart.duration)
-      ))
+        Dry ->
+            row styleExerciceSubPartHeader
+                [ displayKind exosubpart
+                , displayTimeduration exosubpart
+                ]
 
-  Breath ->
-    el [] (text (
-        "Inspiration: "++ (formatDuration exosubpart.duration)
-        ++ " Expiration: "++ (formatDuration exosubpart.rest)
-    ))
-  
-  Swim ->
-    el [] (text (
-        (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Distance: "++ (formatDistance exosubpart.distance) 
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
-    ))
+        Breath ->
+            row styleExerciceSubPartHeader
+                [ displayKind exosubpart
+                , displayTimeduration exosubpart
+                , displayRest exosubpart
+                ]
 
-  DNF ->
-    el [] (text (
-        (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Distance: "++ (formatDistance exosubpart.distance) 
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
+        _ ->
+            row styleExerciceSubPartHeader
+                [ displayKind exosubpart
+                , displayDistance exosubpart
+                , displayDepth exosubpart
+                , displayTimeduration exosubpart
+                , displayRest exosubpart
+                ]
 
-    ))
 
-  DYN ->
-    el [] (text (
-        (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Distance: "++ (formatDistance exosubpart.distance) 
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
+displayKind : TrainingPlanExerciseSubPart -> Element Msg
+displayKind exosubpart =
+    text (formatIfValueStr "" (formatExerciseCategory exosubpart.kind) "")
 
-    ))
 
-  STA ->
-    el [] (text (
-       (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
+displayDistance : TrainingPlanExerciseSubPart -> Element Msg
+displayDistance exosubpart =
+    text (formatIfValueStr "" (formatDistance exosubpart.distance) "")
 
-    ))
 
-  CNF ->
-    el [] (text (
-        (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
+displayDepth : TrainingPlanExerciseSubPart -> Element Msg
+displayDepth exosubpart =
+    text (formatIfValueStr "" (formatDistance exosubpart.depth) "")
 
-    ))
 
-  CWT ->
-    el [] (text (
-        (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
+displayTimeduration : TrainingPlanExerciseSubPart -> Element Msg
+displayTimeduration exosubpart =
+    if (exosubpart.depth > 0) || (getsecondsFromDuration exosubpart.duration > 0) then
+        text (formatIfValueStr "(" (formatDuration exosubpart.duration) ")")
 
-    ))
+    else
+        text ""
 
-  FIM ->
-    el [] (text (
-        (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
-    ))
 
-  VWT ->
-    el [] (text (
-        (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
-    ))
+displayRest : TrainingPlanExerciseSubPart -> Element Msg
+displayRest exosubpart =
+        (if exosubpart.kind == TrainingPlan.Rest then
+            text (formatIfValueStr " " (formatDuration exosubpart.rest) "")
 
-  _ ->
-    el [] (text (
-        (formatExerciseCategory exosubpart.kind) ++ " : "
-        ++ " Distance: "++ (formatDistance exosubpart.distance) 
-        ++ " Profondeur: "++ (formatDistance exosubpart.depth)
-        ++ " Durée: "++ (formatDuration exosubpart.duration)
-        ++ " Repos: "++ (formatDuration exosubpart.rest)
-        ))
+         else
+            text (formatIfValueStr "🚧 " (formatDuration exosubpart.rest) "")
+        )
