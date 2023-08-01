@@ -2,11 +2,6 @@ module UtilsHelper exposing (..)
 
 import TrainingPlan exposing (Timer)
 
-
-type Msg
-    = Name String
-
-
 formatIfValueStr : String -> String -> String -> String
 formatIfValueStr spre rep spos =
     if String.length rep > 0 then
