@@ -89,17 +89,78 @@ formatExerciseCategory exo =
         VWT ->
             "VWT"
 
+
 removeTrainingPlanPart : TrainingPlan -> TrainingPlanPart -> TrainingPlan
 removeTrainingPlanPart plan part =
-    { plan | parts = (LE.remove part plan.parts) }
+    { plan | parts = LE.remove part plan.parts }
 
-removeExercise : TrainingPlanPart -> TrainingPlanExercise -> TrainingPlanPart
-removeExercise part exo =
-    { part | exercises = (LE.remove exo part.exercises) }
 
-removeExerciseSubPart : TrainingPlanExercise -> TrainingPlanExerciseSubPart -> TrainingPlanExercise
-removeExerciseSubPart exo part_to_del =
-    { exo | parts = (LE.remove part_to_del exo.parts) }
+removeExercise : TrainingPlanExercise -> TrainingPlanPart -> TrainingPlanPart
+removeExercise exo part =
+    { part | exercises = LE.remove exo part.exercises }
+
+
+removeExerciseFromModel : Model -> TrainingPlanPart -> TrainingPlanExercise -> Model
+removeExerciseFromModel model part exo =
+    let
+        curr_index =
+            LE.elemIndex part model.plan.parts
+
+        plan =
+            model.plan
+    in
+    case curr_index of
+        Nothing ->
+            model
+
+        Just idx ->
+            Model { plan | parts = LE.updateAt idx (removeExercise exo) plan.parts }
+
+
+removeExerciseSubPart : TrainingPlanExerciseSubPart -> TrainingPlanExercise -> TrainingPlanExercise
+removeExerciseSubPart part_to_del exo =
+    { exo | parts = LE.remove part_to_del exo.parts }
+
+
+removeExerciseSubPartFromModel : Model -> TrainingPlanPart -> TrainingPlanExercise -> TrainingPlanExerciseSubPart -> Model
+removeExerciseSubPartFromModel model planpart exo exosubpart =
+    let
+        trainingplan =
+            model.plan
+
+        part_curr_index =
+            LE.elemIndex planpart model.plan.parts
+
+        exo_curr_index =
+            LE.elemIndex exo planpart.exercises
+    in
+    case part_curr_index of
+        Nothing ->
+            model
+
+        Just part_idx ->
+            case exo_curr_index of
+                Nothing ->
+                    model
+
+                Just exo_idx ->
+                    let
+                        new_exercises =
+                            LE.updateAt exo_idx (removeExerciseSubPart exosubpart) planpart.exercises
+
+                        new_planpart =
+                            { planpart | exercises = new_exercises }
+
+                        new_planparts =
+                            LE.updateAt part_idx (updaterPlanPart new_planpart) trainingplan.parts
+                    in
+                    Model { trainingplan | parts = new_planparts }
+
+
+updaterPlanPart : TrainingPlanPart -> TrainingPlanPart -> TrainingPlanPart
+updaterPlanPart a b =
+    a
+
 
 createDefaultTrainingPlan : String -> String -> String -> TrainingPlan
 createDefaultTrainingPlan name author group =

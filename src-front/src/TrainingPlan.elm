@@ -1,42 +1,9 @@
 module TrainingPlan exposing (..)
 
-type alias Timer =
-    { min : Int
-    , sec : Int
+
+type alias Model =
+    { plan : TrainingPlan
     }
-
-type ExerciseLocation
-    = NoWater
-    | SwimmingPool25m
-    | SwimmingPool50m
-    | SmallPool
-    | DeepPool
-
-
-type ExerciseFamily
-    = Unknown
-    | Break
-    | Duration
-    | Distance
-    | Depth
-    | Relaxation
-    | Composite
-
-
-type ExerciseCategory
-    = Custom
-    | Rest
-    | Dry
-    | Breath
-    | Swim
-    | DNF
-    | DYN
-    | STA
-    | CNF
-    | CWT
-    | FIM
-    | VWT
-
 
 
 type alias TrainingPlan =
@@ -71,3 +38,42 @@ type alias TrainingPlanExerciseSubPart =
     , duration : Timer
     , rest : Timer
     }
+
+
+type alias Timer =
+    { min : Int
+    , sec : Int
+    }
+
+
+type ExerciseLocation
+    = NoWater
+    | SwimmingPool25m
+    | SwimmingPool50m
+    | SmallPool
+    | DeepPool
+
+
+type ExerciseFamily
+    = Unknown
+    | Break
+    | Duration
+    | Distance
+    | Depth
+    | Relaxation
+    | Composite
+
+
+type ExerciseCategory
+    = Custom
+    | Rest
+    | Dry
+    | Breath
+    | Swim
+    | DNF
+    | DYN
+    | STA
+    | CNF
+    | CWT
+    | FIM
+    | VWT

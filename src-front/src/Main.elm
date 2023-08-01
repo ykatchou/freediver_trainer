@@ -26,12 +26,8 @@ main =
 
 
 
--- MODEL
-
-
-type alias Model =
-    { plan : TrainingPlan
-    }
+-- MODEL from TrainingPlan.elm
+-- INIT
 
 
 init : Model
@@ -39,11 +35,15 @@ init =
     Model (createDefaultTrainingPlan "My Training Plan" "Yoann Katchourine" "Mid-beginner")
 
 
-type Msg
-    = DelPlanPartMsg TrainingPlanPart
-    | DelPlanExerciseMsg TrainingPlanExercise
-    | DelPlanExerciseSubPartMsg TrainingPlanExerciseSubPart
 
+-- MSG
+
+
+type Msg
+    = DelWholePlan TrainingPlan
+    | DelPlanPartMsg TrainingPlanPart
+    | DelPlanExerciseMsg TrainingPlanPart TrainingPlanExercise
+    | DelPlanExerciseSubPartMsg TrainingPlanPart TrainingPlanExercise TrainingPlanExerciseSubPart
 
 
 -- UPDATE
@@ -54,6 +54,12 @@ update msg model =
     case msg of
         DelPlanPartMsg part ->
             Model (removeTrainingPlanPart model.plan part)
+
+        DelPlanExerciseMsg part exo ->
+            removeExerciseFromModel model part exo
+
+        DelPlanExerciseSubPartMsg part exo exosubpart ->
+            removeExerciseSubPartFromModel model part exo exosubpart
 
         _ ->
             model
@@ -170,12 +176,12 @@ viewTrainingPlanPart part =
             [ width fill
             , padding 1
             ]
-            (List.map viewTrainingPlanExercise part.exercises)
+            (List.map (viewTrainingPlanExercise part) part.exercises)
         ]
 
 
-viewTrainingPlanExercise : TrainingPlanExercise -> Element Msg
-viewTrainingPlanExercise exo =
+viewTrainingPlanExercise : TrainingPlanPart -> TrainingPlanExercise -> Element Msg
+viewTrainingPlanExercise part exo =
     row
         [ spacing 3
         , padding 0
@@ -195,6 +201,7 @@ viewTrainingPlanExercise exo =
             (exo.parts
                 |> List.map (viewGenericExerciseSubPart exo)
             )
+        , Input.button [ alignRight, Font.size 8 ] { onPress = Just (DelPlanExerciseMsg part exo), label = text "❌" }
         ]
 
 

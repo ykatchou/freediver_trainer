@@ -4392,7 +4392,7 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 {
 	return a >>> offset;
 });
-var $author$project$Main$Model = function (plan) {
+var $author$project$TrainingPlan$Model = function (plan) {
 	return {plan: plan};
 };
 var $elm$core$List$cons = _List_cons;
@@ -4822,7 +4822,7 @@ var $author$project$TrainingPlanHelper$createDefaultTrainingPlan = F3(
 						]))
 				]));
 	});
-var $author$project$Main$init = $author$project$Main$Model(
+var $author$project$Main$init = $author$project$TrainingPlan$Model(
 	A3($author$project$TrainingPlanHelper$createDefaultTrainingPlan, 'My Training Plan', 'Yoann Katchourine', 'Mid-beginner'));
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
@@ -5551,6 +5551,34 @@ var $elm$browser$Browser$sandbox = function (impl) {
 			view: impl.view
 		});
 };
+var $elm_community$list_extra$List$Extra$findIndexHelp = F3(
+	function (index, predicate, list) {
+		findIndexHelp:
+		while (true) {
+			if (!list.b) {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (predicate(x)) {
+					return $elm$core$Maybe$Just(index);
+				} else {
+					var $temp$index = index + 1,
+						$temp$predicate = predicate,
+						$temp$list = xs;
+					index = $temp$index;
+					predicate = $temp$predicate;
+					list = $temp$list;
+					continue findIndexHelp;
+				}
+			}
+		}
+	});
+var $elm_community$list_extra$List$Extra$findIndex = $elm_community$list_extra$List$Extra$findIndexHelp(0);
+var $elm_community$list_extra$List$Extra$elemIndex = function (x) {
+	return $elm_community$list_extra$List$Extra$findIndex(
+		$elm$core$Basics$eq(x));
+};
 var $elm_community$list_extra$List$Extra$reverseAppend = F2(
 	function (list1, list2) {
 		return A3($elm$core$List$foldl, $elm$core$List$cons, list2, list1);
@@ -5584,6 +5612,246 @@ var $elm_community$list_extra$List$Extra$remove = F2(
 	function (x, xs) {
 		return A4($elm_community$list_extra$List$Extra$removeHelp, xs, x, xs, _List_Nil);
 	});
+var $author$project$TrainingPlanHelper$removeExercise = F2(
+	function (exo, part) {
+		return _Utils_update(
+			part,
+			{
+				exercises: A2($elm_community$list_extra$List$Extra$remove, exo, part.exercises)
+			});
+	});
+var $elm$core$List$drop = F2(
+	function (n, list) {
+		drop:
+		while (true) {
+			if (n <= 0) {
+				return list;
+			} else {
+				if (!list.b) {
+					return list;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs;
+					n = $temp$n;
+					list = $temp$list;
+					continue drop;
+				}
+			}
+		}
+	});
+var $elm$core$List$takeReverse = F3(
+	function (n, list, kept) {
+		takeReverse:
+		while (true) {
+			if (n <= 0) {
+				return kept;
+			} else {
+				if (!list.b) {
+					return kept;
+				} else {
+					var x = list.a;
+					var xs = list.b;
+					var $temp$n = n - 1,
+						$temp$list = xs,
+						$temp$kept = A2($elm$core$List$cons, x, kept);
+					n = $temp$n;
+					list = $temp$list;
+					kept = $temp$kept;
+					continue takeReverse;
+				}
+			}
+		}
+	});
+var $elm$core$List$takeTailRec = F2(
+	function (n, list) {
+		return $elm$core$List$reverse(
+			A3($elm$core$List$takeReverse, n, list, _List_Nil));
+	});
+var $elm$core$List$takeFast = F3(
+	function (ctr, n, list) {
+		if (n <= 0) {
+			return _List_Nil;
+		} else {
+			var _v0 = _Utils_Tuple2(n, list);
+			_v0$1:
+			while (true) {
+				_v0$5:
+				while (true) {
+					if (!_v0.b.b) {
+						return list;
+					} else {
+						if (_v0.b.b.b) {
+							switch (_v0.a) {
+								case 1:
+									break _v0$1;
+								case 2:
+									var _v2 = _v0.b;
+									var x = _v2.a;
+									var _v3 = _v2.b;
+									var y = _v3.a;
+									return _List_fromArray(
+										[x, y]);
+								case 3:
+									if (_v0.b.b.b.b) {
+										var _v4 = _v0.b;
+										var x = _v4.a;
+										var _v5 = _v4.b;
+										var y = _v5.a;
+										var _v6 = _v5.b;
+										var z = _v6.a;
+										return _List_fromArray(
+											[x, y, z]);
+									} else {
+										break _v0$5;
+									}
+								default:
+									if (_v0.b.b.b.b && _v0.b.b.b.b.b) {
+										var _v7 = _v0.b;
+										var x = _v7.a;
+										var _v8 = _v7.b;
+										var y = _v8.a;
+										var _v9 = _v8.b;
+										var z = _v9.a;
+										var _v10 = _v9.b;
+										var w = _v10.a;
+										var tl = _v10.b;
+										return (ctr > 1000) ? A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A2($elm$core$List$takeTailRec, n - 4, tl))))) : A2(
+											$elm$core$List$cons,
+											x,
+											A2(
+												$elm$core$List$cons,
+												y,
+												A2(
+													$elm$core$List$cons,
+													z,
+													A2(
+														$elm$core$List$cons,
+														w,
+														A3($elm$core$List$takeFast, ctr + 1, n - 4, tl)))));
+									} else {
+										break _v0$5;
+									}
+							}
+						} else {
+							if (_v0.a === 1) {
+								break _v0$1;
+							} else {
+								break _v0$5;
+							}
+						}
+					}
+				}
+				return list;
+			}
+			var _v1 = _v0.b;
+			var x = _v1.a;
+			return _List_fromArray(
+				[x]);
+		}
+	});
+var $elm$core$List$take = F2(
+	function (n, list) {
+		return A3($elm$core$List$takeFast, 0, n, list);
+	});
+var $elm_community$list_extra$List$Extra$updateAt = F3(
+	function (index, fn, list) {
+		if (index < 0) {
+			return list;
+		} else {
+			var tail = A2($elm$core$List$drop, index, list);
+			if (tail.b) {
+				var x = tail.a;
+				var xs = tail.b;
+				return _Utils_ap(
+					A2($elm$core$List$take, index, list),
+					A2(
+						$elm$core$List$cons,
+						fn(x),
+						xs));
+			} else {
+				return list;
+			}
+		}
+	});
+var $author$project$TrainingPlanHelper$removeExerciseFromModel = F3(
+	function (model, part, exo) {
+		var plan = model.plan;
+		var curr_index = A2($elm_community$list_extra$List$Extra$elemIndex, part, model.plan.parts);
+		if (curr_index.$ === 'Nothing') {
+			return model;
+		} else {
+			var idx = curr_index.a;
+			return $author$project$TrainingPlan$Model(
+				_Utils_update(
+					plan,
+					{
+						parts: A3(
+							$elm_community$list_extra$List$Extra$updateAt,
+							idx,
+							$author$project$TrainingPlanHelper$removeExercise(exo),
+							plan.parts)
+					}));
+		}
+	});
+var $author$project$TrainingPlanHelper$removeExerciseSubPart = F2(
+	function (part_to_del, exo) {
+		return _Utils_update(
+			exo,
+			{
+				parts: A2($elm_community$list_extra$List$Extra$remove, part_to_del, exo.parts)
+			});
+	});
+var $author$project$TrainingPlanHelper$updaterPlanPart = F2(
+	function (a, b) {
+		return a;
+	});
+var $author$project$TrainingPlanHelper$removeExerciseSubPartFromModel = F4(
+	function (model, planpart, exo, exosubpart) {
+		var trainingplan = model.plan;
+		var part_curr_index = A2($elm_community$list_extra$List$Extra$elemIndex, planpart, model.plan.parts);
+		var exo_curr_index = A2($elm_community$list_extra$List$Extra$elemIndex, exo, planpart.exercises);
+		if (part_curr_index.$ === 'Nothing') {
+			return model;
+		} else {
+			var part_idx = part_curr_index.a;
+			if (exo_curr_index.$ === 'Nothing') {
+				return model;
+			} else {
+				var exo_idx = exo_curr_index.a;
+				var new_exercises = A3(
+					$elm_community$list_extra$List$Extra$updateAt,
+					exo_idx,
+					$author$project$TrainingPlanHelper$removeExerciseSubPart(exosubpart),
+					planpart.exercises);
+				var new_planpart = _Utils_update(
+					planpart,
+					{exercises: new_exercises});
+				var new_planparts = A3(
+					$elm_community$list_extra$List$Extra$updateAt,
+					part_idx,
+					$author$project$TrainingPlanHelper$updaterPlanPart(new_planpart),
+					trainingplan.parts);
+				return $author$project$TrainingPlan$Model(
+					_Utils_update(
+						trainingplan,
+						{parts: new_planparts}));
+			}
+		}
+	});
 var $author$project$TrainingPlanHelper$removeTrainingPlanPart = F2(
 	function (plan, part) {
 		return _Utils_update(
@@ -5594,12 +5862,22 @@ var $author$project$TrainingPlanHelper$removeTrainingPlanPart = F2(
 	});
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'DelPlanPartMsg') {
-			var part = msg.a;
-			return $author$project$Main$Model(
-				A2($author$project$TrainingPlanHelper$removeTrainingPlanPart, model.plan, part));
-		} else {
-			return model;
+		switch (msg.$) {
+			case 'DelPlanPartMsg':
+				var part = msg.a;
+				return $author$project$TrainingPlan$Model(
+					A2($author$project$TrainingPlanHelper$removeTrainingPlanPart, model.plan, part));
+			case 'DelPlanExerciseMsg':
+				var part = msg.a;
+				var exo = msg.b;
+				return A3($author$project$TrainingPlanHelper$removeExerciseFromModel, model, part, exo);
+			case 'DelPlanExerciseSubPartMsg':
+				var part = msg.a;
+				var exo = msg.b;
+				var exosubpart = msg.c;
+				return A4($author$project$TrainingPlanHelper$removeExerciseSubPartFromModel, model, part, exo, exosubpart);
+			default:
+				return model;
 		}
 	});
 var $mdgriffith$elm_ui$Internal$Style$classes = {above: 'a', active: 'atv', alignBottom: 'ab', alignCenterX: 'cx', alignCenterY: 'cy', alignContainerBottom: 'acb', alignContainerCenterX: 'accx', alignContainerCenterY: 'accy', alignContainerRight: 'acr', alignLeft: 'al', alignRight: 'ar', alignTop: 'at', alignedHorizontally: 'ah', alignedVertically: 'av', any: 's', behind: 'bh', below: 'b', bold: 'w7', borderDashed: 'bd', borderDotted: 'bdt', borderNone: 'bn', borderSolid: 'bs', capturePointerEvents: 'cpe', clip: 'cp', clipX: 'cpx', clipY: 'cpy', column: 'c', container: 'ctr', contentBottom: 'cb', contentCenterX: 'ccx', contentCenterY: 'ccy', contentLeft: 'cl', contentRight: 'cr', contentTop: 'ct', cursorPointer: 'cptr', cursorText: 'ctxt', focus: 'fcs', focusedWithin: 'focus-within', fullSize: 'fs', grid: 'g', hasBehind: 'hbh', heightContent: 'hc', heightExact: 'he', heightFill: 'hf', heightFillPortion: 'hfp', hover: 'hv', imageContainer: 'ic', inFront: 'fr', inputLabel: 'lbl', inputMultiline: 'iml', inputMultilineFiller: 'imlf', inputMultilineParent: 'imlp', inputMultilineWrapper: 'implw', inputText: 'it', italic: 'i', link: 'lnk', nearby: 'nb', noTextSelection: 'notxt', onLeft: 'ol', onRight: 'or', opaque: 'oq', overflowHidden: 'oh', page: 'pg', paragraph: 'p', passPointerEvents: 'ppe', root: 'ui', row: 'r', scrollbars: 'sb', scrollbarsX: 'sbx', scrollbarsY: 'sby', seButton: 'sbt', single: 'e', sizeByCapital: 'cap', spaceEvenly: 'sev', strike: 'sk', text: 't', textCenter: 'tc', textExtraBold: 'w8', textExtraLight: 'w2', textHeavy: 'w9', textJustify: 'tj', textJustifyAll: 'tja', textLeft: 'tl', textLight: 'w3', textMedium: 'w5', textNormalWeight: 'w4', textRight: 'tr', textSemiBold: 'w6', textThin: 'w1', textUnitalicized: 'tun', transition: 'ts', transparent: 'clr', underline: 'u', widthContent: 'wc', widthExact: 'we', widthFill: 'wf', widthFillPortion: 'wfp', wrapped: 'wrp'};
@@ -11896,6 +12174,10 @@ var $author$project$Main$stylePartHeader = _List_fromArray(
 		$mdgriffith$elm_ui$Element$padding(1),
 		$mdgriffith$elm_ui$Element$Font$size(16)
 	]);
+var $author$project$Main$DelPlanExerciseMsg = F2(
+	function (a, b) {
+		return {$: 'DelPlanExerciseMsg', a: a, b: b};
+	});
 var $mdgriffith$elm_ui$Internal$Flag$fontWeight = $mdgriffith$elm_ui$Internal$Flag$flag(13);
 var $mdgriffith$elm_ui$Element$Font$bold = A2($mdgriffith$elm_ui$Internal$Model$Class, $mdgriffith$elm_ui$Internal$Flag$fontWeight, $mdgriffith$elm_ui$Internal$Style$classes.bold);
 var $author$project$TrainingPlanHelper$formatExerciseFamily = function (exo) {
@@ -12069,43 +12351,56 @@ var $author$project$Main$viewGenericExerciseSubPart = F2(
 		}
 	});
 var $author$project$Main$white = A3($mdgriffith$elm_ui$Element$rgb255, 255, 255, 255);
-var $author$project$Main$viewTrainingPlanExercise = function (exo) {
-	return A2(
-		$mdgriffith$elm_ui$Element$row,
-		_List_fromArray(
-			[
-				$mdgriffith$elm_ui$Element$spacing(3),
-				$mdgriffith$elm_ui$Element$padding(0),
-				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
-			]),
-		_List_fromArray(
-			[
-				$mdgriffith$elm_ui$Element$text(
-				$author$project$TrainingPlanHelper$formatExerciseFamily(exo.family)),
-				$mdgriffith$elm_ui$Element$text(exo.name),
-				$mdgriffith$elm_ui$Element$text(exo.comment),
-				A2(
-				$mdgriffith$elm_ui$Element$el,
-				_List_fromArray(
-					[$mdgriffith$elm_ui$Element$Font$bold]),
-				$mdgriffith$elm_ui$Element$text(
-					A3($author$project$UtilsHelper$formatIfValue, 'x', exo.repeat, ''))),
-				A2(
-				$mdgriffith$elm_ui$Element$row,
-				_List_fromArray(
-					[
-						$mdgriffith$elm_ui$Element$Background$color($author$project$Main$white),
-						$mdgriffith$elm_ui$Element$Font$color($author$project$Main$secondColor),
-						$mdgriffith$elm_ui$Element$Font$size(14),
-						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-						$mdgriffith$elm_ui$Element$spacing(5)
-					]),
-				A2(
-					$elm$core$List$map,
-					$author$project$Main$viewGenericExerciseSubPart(exo),
-					exo.parts))
-			]));
-};
+var $author$project$Main$viewTrainingPlanExercise = F2(
+	function (part, exo) {
+		return A2(
+			$mdgriffith$elm_ui$Element$row,
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$spacing(3),
+					$mdgriffith$elm_ui$Element$padding(0),
+					$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+				]),
+			_List_fromArray(
+				[
+					$mdgriffith$elm_ui$Element$text(
+					$author$project$TrainingPlanHelper$formatExerciseFamily(exo.family)),
+					$mdgriffith$elm_ui$Element$text(exo.name),
+					$mdgriffith$elm_ui$Element$text(exo.comment),
+					A2(
+					$mdgriffith$elm_ui$Element$el,
+					_List_fromArray(
+						[$mdgriffith$elm_ui$Element$Font$bold]),
+					$mdgriffith$elm_ui$Element$text(
+						A3($author$project$UtilsHelper$formatIfValue, 'x', exo.repeat, ''))),
+					A2(
+					$mdgriffith$elm_ui$Element$row,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$Background$color($author$project$Main$white),
+							$mdgriffith$elm_ui$Element$Font$color($author$project$Main$secondColor),
+							$mdgriffith$elm_ui$Element$Font$size(14),
+							$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+							$mdgriffith$elm_ui$Element$spacing(5)
+						]),
+					A2(
+						$elm$core$List$map,
+						$author$project$Main$viewGenericExerciseSubPart(exo),
+						exo.parts)),
+					A2(
+					$mdgriffith$elm_ui$Element$Input$button,
+					_List_fromArray(
+						[
+							$mdgriffith$elm_ui$Element$alignRight,
+							$mdgriffith$elm_ui$Element$Font$size(8)
+						]),
+					{
+						label: $mdgriffith$elm_ui$Element$text('❌'),
+						onPress: $elm$core$Maybe$Just(
+							A2($author$project$Main$DelPlanExerciseMsg, part, exo))
+					})
+				]));
+	});
 var $author$project$Main$viewTrainingPlanPart = function (part) {
 	return A2(
 		$mdgriffith$elm_ui$Element$column,
@@ -12169,7 +12464,10 @@ var $author$project$Main$viewTrainingPlanPart = function (part) {
 						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
 						$mdgriffith$elm_ui$Element$padding(1)
 					]),
-				A2($elm$core$List$map, $author$project$Main$viewTrainingPlanExercise, part.exercises))
+				A2(
+					$elm$core$List$map,
+					$author$project$Main$viewTrainingPlanExercise(part),
+					part.exercises))
 			]));
 };
 var $author$project$Main$viewTrainingPlan = function (plan) {
