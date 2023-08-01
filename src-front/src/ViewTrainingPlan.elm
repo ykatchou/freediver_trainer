@@ -61,6 +61,7 @@ viewTrainingPlanPart part =
             , el stylePartHeader (text (formatIfValueStr "(" (formatDuration (calculateTrainingPlanPartDuration part)) ")"))
             ]
         , column
-            [ width fill ]
+            [ width fill 
+            , padding 1]
             (List.map viewTrainingPlanExercise part.exercises)
         ]

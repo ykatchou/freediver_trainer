@@ -3,6 +3,7 @@ import Element exposing (Element, Attribute, Color, alignRight, centerY, column,
 import Element.Font as Font
 import UtilsHelper exposing (Msg)
 import Element exposing (Attr)
+import Element.Border as Border
 
 mainColor : Color
 mainColor =
@@ -25,18 +26,21 @@ styleTextHeader : List (Attribute Msg)
 styleTextHeader =
     [
         padding 1
-        , Font.size 14
+        , Font.size 13
     ]
 
 stylePartHeader : List (Attribute Msg)
 stylePartHeader =
     [
         padding 1
-        , Font.size 14
+        , Font.size 16
     ]
 
 styleExerciceSubPartHeader : List (Attribute Msg)
 styleExerciceSubPartHeader = 
     [
-        spacing 5
+        spacing 2
+        , padding 1
+        , Border.color mainColor
+        , Border.width 1
     ]

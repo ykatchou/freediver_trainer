@@ -16,20 +16,19 @@ viewTrainingPlanExercise : TrainingPlanExercise -> Element Msg
 viewTrainingPlanExercise exo =
     row
         [ spacing 3
-        , padding 1
+        , padding 0
         , width fill
         ]
         [ text (formatExerciseFamily exo.family)
         , text exo.name
         , text exo.comment
         , el [ Font.bold ] (text (formatIfValue "x" exo.repeat ""))
-        , column
+        , row
             [ Background.color <| white
             , Font.color <| secondColor
             , Font.size 14
             , width fill
-            , spacing 1
-            , Border.width 0
+            , spacing 5
             ]
             (exo.parts
                 |> List.map (viewGenericExerciseSubPart exo)
@@ -41,7 +40,8 @@ viewGenericExerciseSubPart : TrainingPlanExercise -> TrainingPlanExerciseSubPart
 viewGenericExerciseSubPart exo exosubpart =
     case exosubpart.kind of
         Rest ->
-            displayRest exo.family exosubpart
+          el styleExerciceSubPartHeader
+            (displayRest exo.family exosubpart)
 
         Dry ->
             row styleExerciceSubPartHeader
@@ -55,7 +55,6 @@ viewGenericExerciseSubPart exo exosubpart =
                 , displayTimeduration exo.family exosubpart
                 , displayRest exo.family exosubpart
                 ]
-
         _ ->
             row styleExerciceSubPartHeader
                 [ displayKind exosubpart
@@ -84,15 +83,13 @@ displayDepth exosubpart =
 displayTimeduration : ExerciseFamily -> TrainingPlanExerciseSubPart -> Element Msg
 displayTimeduration family exosubpart =
     case family of
-        Distance -> text ""
-        Depth -> text ""
         _ ->
           text (formatIfValueStr "(" (formatDuration exosubpart.duration) ")")
 
 displayRest : ExerciseFamily -> TrainingPlanExerciseSubPart -> Element Msg
 displayRest family exosubpart =
     if family == Break then
-        text (formatIfValueStr " " (formatDuration exosubpart.rest) "")
+        text (formatIfValueStr "" (formatDuration exosubpart.rest) "")
 
     else
         text (formatIfValueStr "🚧 " (formatDuration exosubpart.rest) "")

@@ -10946,7 +10946,7 @@ var $mdgriffith$elm_ui$Element$Font$size = function (i) {
 var $author$project$StyleHelper$styleTextHeader = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$padding(1),
-		$mdgriffith$elm_ui$Element$Font$size(14)
+		$mdgriffith$elm_ui$Element$Font$size(13)
 	]);
 var $mdgriffith$elm_ui$Internal$Model$Text = function (a) {
 	return {$: 'Text', a: a};
@@ -10990,7 +10990,7 @@ var $author$project$StyleHelper$mainColor = A3($mdgriffith$elm_ui$Element$rgb255
 var $author$project$StyleHelper$stylePartHeader = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$padding(1),
-		$mdgriffith$elm_ui$Element$Font$size(14)
+		$mdgriffith$elm_ui$Element$Font$size(16)
 	]);
 var $mdgriffith$elm_ui$Internal$Model$Class = F2(
 	function (a, b) {
@@ -11085,7 +11085,7 @@ var $author$project$ViewExercise$displayRest = F2(
 		return _Utils_eq(family, $author$project$TrainingPlan$Break) ? $mdgriffith$elm_ui$Element$text(
 			A3(
 				$author$project$UtilsHelper$formatIfValueStr,
-				' ',
+				'',
 				$author$project$UtilsHelper$formatDuration(exosubpart.rest),
 				'')) : $mdgriffith$elm_ui$Element$text(
 			A3(
@@ -11096,30 +11096,45 @@ var $author$project$ViewExercise$displayRest = F2(
 	});
 var $author$project$ViewExercise$displayTimeduration = F2(
 	function (family, exosubpart) {
-		switch (family.$) {
-			case 'Distance':
-				return $mdgriffith$elm_ui$Element$text('');
-			case 'Depth':
-				return $mdgriffith$elm_ui$Element$text('');
-			default:
-				return $mdgriffith$elm_ui$Element$text(
-					A3(
-						$author$project$UtilsHelper$formatIfValueStr,
-						'(',
-						$author$project$UtilsHelper$formatDuration(exosubpart.duration),
-						')'));
-		}
+		return $mdgriffith$elm_ui$Element$text(
+			A3(
+				$author$project$UtilsHelper$formatIfValueStr,
+				'(',
+				$author$project$UtilsHelper$formatDuration(exosubpart.duration),
+				')'));
 	});
+var $mdgriffith$elm_ui$Internal$Model$BorderWidth = F5(
+	function (a, b, c, d, e) {
+		return {$: 'BorderWidth', a: a, b: b, c: c, d: d, e: e};
+	});
+var $mdgriffith$elm_ui$Element$Border$width = function (v) {
+	return A2(
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$borderWidth,
+		A5(
+			$mdgriffith$elm_ui$Internal$Model$BorderWidth,
+			'b-' + $elm$core$String$fromInt(v),
+			v,
+			v,
+			v,
+			v));
+};
 var $author$project$StyleHelper$styleExerciceSubPartHeader = _List_fromArray(
 	[
-		$mdgriffith$elm_ui$Element$spacing(5)
+		$mdgriffith$elm_ui$Element$spacing(2),
+		$mdgriffith$elm_ui$Element$padding(1),
+		$mdgriffith$elm_ui$Element$Border$color($author$project$StyleHelper$mainColor),
+		$mdgriffith$elm_ui$Element$Border$width(1)
 	]);
 var $author$project$ViewExercise$viewGenericExerciseSubPart = F2(
 	function (exo, exosubpart) {
 		var _v0 = exosubpart.kind;
 		switch (_v0.$) {
 			case 'Rest':
-				return A2($author$project$ViewExercise$displayRest, exo.family, exosubpart);
+				return A2(
+					$mdgriffith$elm_ui$Element$el,
+					$author$project$StyleHelper$styleExerciceSubPartHeader,
+					A2($author$project$ViewExercise$displayRest, exo.family, exosubpart));
 			case 'Dry':
 				return A2(
 					$mdgriffith$elm_ui$Element$row,
@@ -11154,29 +11169,13 @@ var $author$project$ViewExercise$viewGenericExerciseSubPart = F2(
 		}
 	});
 var $author$project$StyleHelper$white = A3($mdgriffith$elm_ui$Element$rgb255, 255, 255, 255);
-var $mdgriffith$elm_ui$Internal$Model$BorderWidth = F5(
-	function (a, b, c, d, e) {
-		return {$: 'BorderWidth', a: a, b: b, c: c, d: d, e: e};
-	});
-var $mdgriffith$elm_ui$Element$Border$width = function (v) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$borderWidth,
-		A5(
-			$mdgriffith$elm_ui$Internal$Model$BorderWidth,
-			'b-' + $elm$core$String$fromInt(v),
-			v,
-			v,
-			v,
-			v));
-};
 var $author$project$ViewExercise$viewTrainingPlanExercise = function (exo) {
 	return A2(
 		$mdgriffith$elm_ui$Element$row,
 		_List_fromArray(
 			[
 				$mdgriffith$elm_ui$Element$spacing(3),
-				$mdgriffith$elm_ui$Element$padding(1),
+				$mdgriffith$elm_ui$Element$padding(0),
 				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
 			]),
 		_List_fromArray(
@@ -11192,15 +11191,14 @@ var $author$project$ViewExercise$viewTrainingPlanExercise = function (exo) {
 				$mdgriffith$elm_ui$Element$text(
 					A3($author$project$UtilsHelper$formatIfValue, 'x', exo.repeat, ''))),
 				A2(
-				$mdgriffith$elm_ui$Element$column,
+				$mdgriffith$elm_ui$Element$row,
 				_List_fromArray(
 					[
 						$mdgriffith$elm_ui$Element$Background$color($author$project$StyleHelper$white),
 						$mdgriffith$elm_ui$Element$Font$color($author$project$StyleHelper$secondColor),
 						$mdgriffith$elm_ui$Element$Font$size(14),
 						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-						$mdgriffith$elm_ui$Element$spacing(1),
-						$mdgriffith$elm_ui$Element$Border$width(0)
+						$mdgriffith$elm_ui$Element$spacing(5)
 					]),
 				A2(
 					$elm$core$List$map,
@@ -11259,7 +11257,8 @@ var $author$project$ViewTrainingPlan$viewTrainingPlanPart = function (part) {
 				$mdgriffith$elm_ui$Element$column,
 				_List_fromArray(
 					[
-						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill)
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$padding(1)
 					]),
 				A2($elm$core$List$map, $author$project$ViewExercise$viewTrainingPlanExercise, part.exercises))
 			]));
