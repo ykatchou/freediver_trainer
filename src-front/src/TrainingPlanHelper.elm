@@ -1,6 +1,7 @@
 module TrainingPlanHelper exposing (..)
 
 import Duration exposing (..)
+import List.Extra as LE exposing (..)
 import TrainingPlan exposing (..)
 import UtilsHelper exposing (..)
 
@@ -87,6 +88,20 @@ formatExerciseCategory exo =
 
         VWT ->
             "VWT"
+
+removeTrainingPlanPart : TrainingPlan -> TrainingPlanPart -> TrainingPlan
+removeTrainingPlanPart plan part =
+  TrainingPlan plan.name plan.author plan.lastchangedate plan.group
+  (LE.remove part plan.parts)
+
+removeExercise : TrainingPlanPart -> TrainingPlanExercise -> TrainingPlanPart
+removeExercise part exo =
+    TrainingPlanPart part.name part.location (LE.remove exo part.exercises)
+
+
+removeExerciseSubPart : TrainingPlanExercise -> TrainingPlanExerciseSubPart -> TrainingPlanExercise
+removeExerciseSubPart exo part_to_del =
+    TrainingPlanExercise exo.family exo.name exo.comment exo.repeat (LE.remove part_to_del exo.parts)
 
 
 createDefaultTrainingPlan : String -> String -> String -> TrainingPlan
