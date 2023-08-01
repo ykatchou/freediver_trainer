@@ -11080,82 +11080,95 @@ var $author$project$ViewExercise$displayKind = function (exosubpart) {
 			$author$project$TrainingPlanHelper$formatExerciseCategory(exosubpart.kind),
 			''));
 };
-var $author$project$ViewExercise$displayRest = function (exosubpart) {
-	return _Utils_eq(exosubpart.kind, $author$project$TrainingPlan$Rest) ? $mdgriffith$elm_ui$Element$text(
-		A3(
-			$author$project$UtilsHelper$formatIfValueStr,
-			' ',
-			$author$project$UtilsHelper$formatDuration(exosubpart.rest),
-			'')) : $mdgriffith$elm_ui$Element$text(
-		A3(
-			$author$project$UtilsHelper$formatIfValueStr,
-			'🚧 ',
-			$author$project$UtilsHelper$formatDuration(exosubpart.rest),
-			''));
-};
-var $author$project$ViewExercise$displayTimeduration = function (exosubpart) {
-	return ((exosubpart.depth > 0) || ($author$project$Duration$getsecondsFromDuration(exosubpart.duration) > 0)) ? $mdgriffith$elm_ui$Element$text(
-		A3(
-			$author$project$UtilsHelper$formatIfValueStr,
-			'(',
-			$author$project$UtilsHelper$formatDuration(exosubpart.duration),
-			')')) : $mdgriffith$elm_ui$Element$text('');
-};
+var $author$project$ViewExercise$displayRest = F2(
+	function (family, exosubpart) {
+		return _Utils_eq(family, $author$project$TrainingPlan$Break) ? $mdgriffith$elm_ui$Element$text(
+			A3(
+				$author$project$UtilsHelper$formatIfValueStr,
+				' ',
+				$author$project$UtilsHelper$formatDuration(exosubpart.rest),
+				'')) : $mdgriffith$elm_ui$Element$text(
+			A3(
+				$author$project$UtilsHelper$formatIfValueStr,
+				'🚧 ',
+				$author$project$UtilsHelper$formatDuration(exosubpart.rest),
+				''));
+	});
+var $author$project$ViewExercise$displayTimeduration = F2(
+	function (family, exosubpart) {
+		switch (family.$) {
+			case 'Distance':
+				return $mdgriffith$elm_ui$Element$text('');
+			case 'Depth':
+				return $mdgriffith$elm_ui$Element$text('');
+			default:
+				return $mdgriffith$elm_ui$Element$text(
+					A3(
+						$author$project$UtilsHelper$formatIfValueStr,
+						'(',
+						$author$project$UtilsHelper$formatDuration(exosubpart.duration),
+						')'));
+		}
+	});
 var $author$project$StyleHelper$styleExerciceSubPartHeader = _List_fromArray(
 	[
 		$mdgriffith$elm_ui$Element$spacing(5)
 	]);
-var $author$project$ViewExercise$viewGenericExerciseSubPart = function (exosubpart) {
-	var _v0 = exosubpart.kind;
-	switch (_v0.$) {
-		case 'Rest':
-			return $author$project$ViewExercise$displayRest(exosubpart);
-		case 'Dry':
-			return A2(
-				$mdgriffith$elm_ui$Element$row,
-				$author$project$StyleHelper$styleExerciceSubPartHeader,
-				_List_fromArray(
-					[
-						$author$project$ViewExercise$displayKind(exosubpart),
-						$author$project$ViewExercise$displayTimeduration(exosubpart)
-					]));
-		case 'Breath':
-			return A2(
-				$mdgriffith$elm_ui$Element$row,
-				$author$project$StyleHelper$styleExerciceSubPartHeader,
-				_List_fromArray(
-					[
-						$author$project$ViewExercise$displayKind(exosubpart),
-						$author$project$ViewExercise$displayTimeduration(exosubpart),
-						$author$project$ViewExercise$displayRest(exosubpart)
-					]));
-		default:
-			return A2(
-				$mdgriffith$elm_ui$Element$row,
-				$author$project$StyleHelper$styleExerciceSubPartHeader,
-				_List_fromArray(
-					[
-						$author$project$ViewExercise$displayKind(exosubpart),
-						$author$project$ViewExercise$displayDistance(exosubpart),
-						$author$project$ViewExercise$displayDepth(exosubpart),
-						$author$project$ViewExercise$displayTimeduration(exosubpart),
-						$author$project$ViewExercise$displayRest(exosubpart)
-					]));
-	}
-};
+var $author$project$ViewExercise$viewGenericExerciseSubPart = F2(
+	function (exo, exosubpart) {
+		var _v0 = exosubpart.kind;
+		switch (_v0.$) {
+			case 'Rest':
+				return A2($author$project$ViewExercise$displayRest, exo.family, exosubpart);
+			case 'Dry':
+				return A2(
+					$mdgriffith$elm_ui$Element$row,
+					$author$project$StyleHelper$styleExerciceSubPartHeader,
+					_List_fromArray(
+						[
+							$author$project$ViewExercise$displayKind(exosubpart),
+							A2($author$project$ViewExercise$displayTimeduration, exo.family, exosubpart)
+						]));
+			case 'Breath':
+				return A2(
+					$mdgriffith$elm_ui$Element$row,
+					$author$project$StyleHelper$styleExerciceSubPartHeader,
+					_List_fromArray(
+						[
+							$author$project$ViewExercise$displayKind(exosubpart),
+							A2($author$project$ViewExercise$displayTimeduration, exo.family, exosubpart),
+							A2($author$project$ViewExercise$displayRest, exo.family, exosubpart)
+						]));
+			default:
+				return A2(
+					$mdgriffith$elm_ui$Element$row,
+					$author$project$StyleHelper$styleExerciceSubPartHeader,
+					_List_fromArray(
+						[
+							$author$project$ViewExercise$displayKind(exosubpart),
+							$author$project$ViewExercise$displayDistance(exosubpart),
+							$author$project$ViewExercise$displayDepth(exosubpart),
+							A2($author$project$ViewExercise$displayTimeduration, exo.family, exosubpart),
+							A2($author$project$ViewExercise$displayRest, exo.family, exosubpart)
+						]));
+		}
+	});
 var $author$project$StyleHelper$white = A3($mdgriffith$elm_ui$Element$rgb255, 255, 255, 255);
-var $author$project$ViewExercise$viewGenericExercise = function (exo) {
+var $mdgriffith$elm_ui$Internal$Model$BorderWidth = F5(
+	function (a, b, c, d, e) {
+		return {$: 'BorderWidth', a: a, b: b, c: c, d: d, e: e};
+	});
+var $mdgriffith$elm_ui$Element$Border$width = function (v) {
 	return A2(
-		$mdgriffith$elm_ui$Element$column,
-		_List_fromArray(
-			[
-				$mdgriffith$elm_ui$Element$Background$color($author$project$StyleHelper$white),
-				$mdgriffith$elm_ui$Element$Font$color($author$project$StyleHelper$secondColor),
-				$mdgriffith$elm_ui$Element$Font$size(14),
-				$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
-				$mdgriffith$elm_ui$Element$spacing(1)
-			]),
-		A2($elm$core$List$map, $author$project$ViewExercise$viewGenericExerciseSubPart, exo.parts));
+		$mdgriffith$elm_ui$Internal$Model$StyleClass,
+		$mdgriffith$elm_ui$Internal$Flag$borderWidth,
+		A5(
+			$mdgriffith$elm_ui$Internal$Model$BorderWidth,
+			'b-' + $elm$core$String$fromInt(v),
+			v,
+			v,
+			v,
+			v));
 };
 var $author$project$ViewExercise$viewTrainingPlanExercise = function (exo) {
 	return A2(
@@ -11178,24 +11191,22 @@ var $author$project$ViewExercise$viewTrainingPlanExercise = function (exo) {
 					[$mdgriffith$elm_ui$Element$Font$bold]),
 				$mdgriffith$elm_ui$Element$text(
 					A3($author$project$UtilsHelper$formatIfValue, 'x', exo.repeat, ''))),
-				$author$project$ViewExercise$viewGenericExercise(exo)
+				A2(
+				$mdgriffith$elm_ui$Element$column,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$Background$color($author$project$StyleHelper$white),
+						$mdgriffith$elm_ui$Element$Font$color($author$project$StyleHelper$secondColor),
+						$mdgriffith$elm_ui$Element$Font$size(14),
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$spacing(1),
+						$mdgriffith$elm_ui$Element$Border$width(0)
+					]),
+				A2(
+					$elm$core$List$map,
+					$author$project$ViewExercise$viewGenericExerciseSubPart(exo),
+					exo.parts))
 			]));
-};
-var $mdgriffith$elm_ui$Internal$Model$BorderWidth = F5(
-	function (a, b, c, d, e) {
-		return {$: 'BorderWidth', a: a, b: b, c: c, d: d, e: e};
-	});
-var $mdgriffith$elm_ui$Element$Border$width = function (v) {
-	return A2(
-		$mdgriffith$elm_ui$Internal$Model$StyleClass,
-		$mdgriffith$elm_ui$Internal$Flag$borderWidth,
-		A5(
-			$mdgriffith$elm_ui$Internal$Model$BorderWidth,
-			'b-' + $elm$core$String$fromInt(v),
-			v,
-			v,
-			v,
-			v));
 };
 var $author$project$ViewTrainingPlan$viewTrainingPlanPart = function (part) {
 	return A2(
@@ -11207,14 +11218,21 @@ var $author$project$ViewTrainingPlan$viewTrainingPlanPart = function (part) {
 				$mdgriffith$elm_ui$Element$Font$color($author$project$StyleHelper$mainColor),
 				$mdgriffith$elm_ui$Element$Font$size(16),
 				$mdgriffith$elm_ui$Element$Border$color($author$project$StyleHelper$mainColor),
-				$mdgriffith$elm_ui$Element$Border$width(2),
+				$mdgriffith$elm_ui$Element$Border$width(1),
 				$mdgriffith$elm_ui$Element$Border$rounded(5)
 			]),
 		_List_fromArray(
 			[
 				A2(
 				$mdgriffith$elm_ui$Element$row,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$mdgriffith$elm_ui$Element$width($mdgriffith$elm_ui$Element$fill),
+						$mdgriffith$elm_ui$Element$Border$color($author$project$StyleHelper$mainColor),
+						$mdgriffith$elm_ui$Element$Border$width(1),
+						$mdgriffith$elm_ui$Element$Background$color($author$project$StyleHelper$mainColor),
+						$mdgriffith$elm_ui$Element$Font$color($author$project$StyleHelper$white)
+					]),
 				_List_fromArray(
 					[
 						A2(

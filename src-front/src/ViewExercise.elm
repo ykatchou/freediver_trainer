@@ -9,6 +9,7 @@ import StyleHelper exposing (..)
 import TrainingPlan exposing (..)
 import TrainingPlanHelper exposing (..)
 import UtilsHelper exposing (..)
+import Element.Font exposing (family)
 
 
 viewTrainingPlanExercise : TrainingPlanExercise -> Element Msg
@@ -22,41 +23,37 @@ viewTrainingPlanExercise exo =
         , text exo.name
         , text exo.comment
         , el [ Font.bold ] (text (formatIfValue "x" exo.repeat ""))
-        , viewGenericExercise exo
+        , column
+            [ Background.color <| white
+            , Font.color <| secondColor
+            , Font.size 14
+            , width fill
+            , spacing 1
+            , Border.width 0
+            ]
+            (exo.parts
+                |> List.map (viewGenericExerciseSubPart exo)
+            )
         ]
 
 
-viewGenericExercise : TrainingPlanExercise -> Element Msg
-viewGenericExercise exo =
-    column
-        [ Background.color <| white
-        , Font.color <| secondColor
-        , Font.size 14
-        , width fill
-        , spacing 1
-        ]
-        (exo.parts
-            |> List.map viewGenericExerciseSubPart
-        )
-
-
-viewGenericExerciseSubPart : TrainingPlanExerciseSubPart -> Element Msg
-viewGenericExerciseSubPart exosubpart =
+viewGenericExerciseSubPart : TrainingPlanExercise -> TrainingPlanExerciseSubPart -> Element Msg
+viewGenericExerciseSubPart exo exosubpart =
     case exosubpart.kind of
         Rest ->
-            displayRest exosubpart
+            displayRest exo.family exosubpart
 
         Dry ->
             row styleExerciceSubPartHeader
                 [ displayKind exosubpart
-                , displayTimeduration exosubpart
+                , displayTimeduration exo.family exosubpart
                 ]
 
         Breath ->
             row styleExerciceSubPartHeader
                 [ displayKind exosubpart
-                , displayTimeduration exosubpart
-                , displayRest exosubpart
+                , displayTimeduration exo.family exosubpart
+                , displayRest exo.family exosubpart
                 ]
 
         _ ->
@@ -64,8 +61,8 @@ viewGenericExerciseSubPart exosubpart =
                 [ displayKind exosubpart
                 , displayDistance exosubpart
                 , displayDepth exosubpart
-                , displayTimeduration exosubpart
-                , displayRest exosubpart
+                , displayTimeduration exo.family exosubpart
+                , displayRest exo.family exosubpart
                 ]
 
 
@@ -84,20 +81,18 @@ displayDepth exosubpart =
     text (formatIfValueStr "" (formatDistance exosubpart.depth) "")
 
 
-displayTimeduration : TrainingPlanExerciseSubPart -> Element Msg
-displayTimeduration exosubpart =
-    if (exosubpart.depth > 0) || (getsecondsFromDuration exosubpart.duration > 0) then
-        text (formatIfValueStr "(" (formatDuration exosubpart.duration) ")")
+displayTimeduration : ExerciseFamily -> TrainingPlanExerciseSubPart -> Element Msg
+displayTimeduration family exosubpart =
+    case family of
+        Distance -> text ""
+        Depth -> text ""
+        _ ->
+          text (formatIfValueStr "(" (formatDuration exosubpart.duration) ")")
+
+displayRest : ExerciseFamily -> TrainingPlanExerciseSubPart -> Element Msg
+displayRest family exosubpart =
+    if family == Break then
+        text (formatIfValueStr " " (formatDuration exosubpart.rest) "")
 
     else
-        text ""
-
-
-displayRest : TrainingPlanExerciseSubPart -> Element Msg
-displayRest exosubpart =
-        (if exosubpart.kind == TrainingPlan.Rest then
-            text (formatIfValueStr " " (formatDuration exosubpart.rest) "")
-
-         else
-            text (formatIfValueStr "🚧 " (formatDuration exosubpart.rest) "")
-        )
+        text (formatIfValueStr "🚧 " (formatDuration exosubpart.rest) "")

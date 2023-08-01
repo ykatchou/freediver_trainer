@@ -12,8 +12,6 @@ import UtilsHelper exposing (..)
 import ViewExercise exposing (..)
 
 
-
-
 viewTrainingPlan : TrainingPlan -> Element Msg
 viewTrainingPlan plan =
     column
@@ -48,10 +46,16 @@ viewTrainingPlanPart part =
         , Font.color mainColor
         , Font.size 16
         , Border.color mainColor
-        , Border.width 2
+        , Border.width 1
         , Border.rounded 5
         ]
-        [ row []
+        [ row
+            [ width fill
+            , Border.color mainColor
+            , Border.width 1
+            , Background.color mainColor
+            , Font.color white
+            ]
             [ el stylePartHeader (text part.name)
             , el stylePartHeader (text (formatExerciseLocation part.location))
             , el stylePartHeader (text (formatIfValueStr "(" (formatDuration (calculateTrainingPlanPartDuration part)) ")"))
