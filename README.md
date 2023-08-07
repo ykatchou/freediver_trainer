@@ -1,10 +1,8 @@
 # freediver_trainer
 
-**This application is still a WIP.**
+**This application is still a WIP done as a hobby.**
 
-The intention is to built a small app allowing to generate freediving training sessions.
-
-It is done as a hobby.
+The intention is to built a small web app allowing to design freediving training sessions.
 
 ## Licensing
 
