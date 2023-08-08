@@ -5807,50 +5807,164 @@ var $author$project$TrainingPlanHelper$removeExerciseFromModel = F3(
 					}));
 		}
 	});
-var $author$project$TrainingPlanHelper$removeExerciseSubPart = F2(
-	function (part_to_del, exo) {
-		return _Utils_update(
-			exo,
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $bChiquet$elm_accessors$Accessors$Internal$Relation = function (a) {
+	return {$: 'Relation', a: a};
+};
+var $bChiquet$elm_accessors$Accessors$makeOneToOne = F3(
+	function (getter, mapper, _v0) {
+		var sub = _v0.a;
+		return $bChiquet$elm_accessors$Accessors$Internal$Relation(
 			{
-				parts: A2($elm_community$list_extra$List$Extra$remove, part_to_del, exo.parts)
+				get: function (_super) {
+					return sub.get(
+						getter(_super));
+				},
+				over: F2(
+					function (change, _super) {
+						return A2(
+							mapper,
+							sub.over(change),
+							_super);
+					})
 			});
 	});
-var $author$project$TrainingPlanHelper$updaterPlanPart = F2(
-	function (a, b) {
-		return a;
+var $author$project$Acc$exercises = A2(
+	$bChiquet$elm_accessors$Accessors$makeOneToOne,
+	function ($) {
+		return $.exercises;
+	},
+	F2(
+		function (change, record) {
+			return _Utils_update(
+				record,
+				{
+					exercises: change(record.exercises)
+				});
+		}));
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
 	});
+var $bChiquet$elm_accessors$Accessors$makeOneToN = F3(
+	function (getter, mapper, _v0) {
+		var sub = _v0.a;
+		return $bChiquet$elm_accessors$Accessors$Internal$Relation(
+			{
+				get: function (_super) {
+					return A2(getter, sub.get, _super);
+				},
+				over: F2(
+					function (change, _super) {
+						return A2(
+							mapper,
+							sub.over(change),
+							_super);
+					})
+			});
+	});
+var $author$project$Acc$matching = function (x) {
+	return A2(
+		$bChiquet$elm_accessors$Accessors$makeOneToN,
+		F2(
+			function (f, list) {
+				return A2(
+					$elm$core$List$map,
+					f,
+					A2(
+						$elm$core$List$filter,
+						function (e) {
+							return _Utils_eq(e, x);
+						},
+						list));
+			}),
+		F2(
+			function (f, list) {
+				return A2(
+					$elm$core$List$map,
+					function (content) {
+						return _Utils_eq(content, x) ? f(x) : x;
+					},
+					list);
+			}));
+};
+var $elm$core$Basics$neq = _Utils_notEqual;
+var $bChiquet$elm_accessors$Accessors$Internal$id = $bChiquet$elm_accessors$Accessors$Internal$Relation(
+	{
+		get: function (a) {
+			return a;
+		},
+		over: function (change) {
+			return function (a) {
+				return change(a);
+			};
+		}
+	});
+var $bChiquet$elm_accessors$Accessors$over = F3(
+	function (accessor, change, s) {
+		var _v0 = accessor($bChiquet$elm_accessors$Accessors$Internal$id);
+		var relation = _v0.a;
+		return A2(relation.over, change, s);
+	});
+var $author$project$Acc$parts = A2(
+	$bChiquet$elm_accessors$Accessors$makeOneToOne,
+	function ($) {
+		return $.parts;
+	},
+	F2(
+		function (change, record) {
+			return _Utils_update(
+				record,
+				{
+					parts: change(record.parts)
+				});
+		}));
+var $author$project$Acc$plan = A2(
+	$bChiquet$elm_accessors$Accessors$makeOneToOne,
+	function ($) {
+		return $.plan;
+	},
+	F2(
+		function (change, record) {
+			return _Utils_update(
+				record,
+				{
+					plan: change(record.plan)
+				});
+		}));
 var $author$project$TrainingPlanHelper$removeExerciseSubPartFromModel = F4(
 	function (model, planpart, exo, exosubpart) {
-		var trainingplan = model.plan;
-		var part_curr_index = A2($elm_community$list_extra$List$Extra$elemIndex, planpart, model.plan.parts);
-		var exo_curr_index = A2($elm_community$list_extra$List$Extra$elemIndex, exo, planpart.exercises);
-		if (part_curr_index.$ === 'Nothing') {
-			return model;
-		} else {
-			var part_idx = part_curr_index.a;
-			if (exo_curr_index.$ === 'Nothing') {
-				return model;
-			} else {
-				var exo_idx = exo_curr_index.a;
-				var new_exercises = A3(
-					$elm_community$list_extra$List$Extra$updateAt,
-					exo_idx,
-					$author$project$TrainingPlanHelper$removeExerciseSubPart(exosubpart),
-					planpart.exercises);
-				var new_planpart = _Utils_update(
-					planpart,
-					{exercises: new_exercises});
-				var new_planparts = A3(
-					$elm_community$list_extra$List$Extra$updateAt,
-					part_idx,
-					$author$project$TrainingPlanHelper$updaterPlanPart(new_planpart),
-					trainingplan.parts);
-				return $author$project$TrainingPlan$Model(
-					_Utils_update(
-						trainingplan,
-						{parts: new_planparts}));
-			}
-		}
+		return A3(
+			$bChiquet$elm_accessors$Accessors$over,
+			A2(
+				$elm$core$Basics$composeL,
+				A2(
+					$elm$core$Basics$composeL,
+					A2(
+						$elm$core$Basics$composeL,
+						A2(
+							$elm$core$Basics$composeL,
+							A2($elm$core$Basics$composeL, $author$project$Acc$plan, $author$project$Acc$parts),
+							$author$project$Acc$matching(planpart)),
+						$author$project$Acc$exercises),
+					$author$project$Acc$matching(exo)),
+				$author$project$Acc$parts),
+			$elm$core$List$filter(
+				function (subpart) {
+					return !_Utils_eq(subpart, exosubpart);
+				}),
+			model);
 	});
 var $author$project$TrainingPlanHelper$removeTrainingPlanPart = F2(
 	function (plan, part) {
@@ -9405,17 +9519,6 @@ var $mdgriffith$elm_ui$Internal$Model$adjust = F3(
 	function (size, height, vertical) {
 		return {height: height / size, size: size, vertical: vertical};
 	});
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
 var $elm$core$List$maximum = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -9436,7 +9539,6 @@ var $elm$core$List$minimum = function (list) {
 		return $elm$core$Maybe$Nothing;
 	}
 };
-var $elm$core$Basics$neq = _Utils_notEqual;
 var $mdgriffith$elm_ui$Internal$Model$convertAdjustment = function (adjustment) {
 	var lines = _List_fromArray(
 		[adjustment.capital, adjustment.baseline, adjustment.descender, adjustment.lowercase]);
@@ -12007,11 +12109,6 @@ var $mdgriffith$elm_ui$Element$Input$hasFocusStyle = function (attr) {
 var $mdgriffith$elm_ui$Element$Input$focusDefault = function (attrs) {
 	return A2($elm$core$List$any, $mdgriffith$elm_ui$Element$Input$hasFocusStyle, attrs) ? $mdgriffith$elm_ui$Internal$Model$NoAttribute : $mdgriffith$elm_ui$Internal$Model$htmlClass('focusable');
 };
-var $elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
