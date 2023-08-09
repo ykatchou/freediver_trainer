@@ -4,6 +4,9 @@ import Duration exposing (..)
 import List.Extra as LE exposing (..)
 import TrainingPlan exposing (..)
 import UtilsHelper exposing (..)
+import Acc exposing (plan, parts, exercises, matching)
+import Accessors exposing (over)
+
 
 
 formatExerciseLocation : ExerciseLocation -> String
@@ -124,38 +127,10 @@ removeExerciseSubPart part_to_del exo =
 
 removeExerciseSubPartFromModel : Model -> TrainingPlanPart -> TrainingPlanExercise -> TrainingPlanExerciseSubPart -> Model
 removeExerciseSubPartFromModel model planpart exo exosubpart =
-    let
-        trainingplan =
-            model.plan
-
-        part_curr_index =
-            LE.elemIndex planpart model.plan.parts
-
-        exo_curr_index =
-            LE.elemIndex exo planpart.exercises
-    in
-    case part_curr_index of
-        Nothing ->
-            model
-
-        Just part_idx ->
-            case exo_curr_index of
-                Nothing ->
-                    model
-
-                Just exo_idx ->
-                    let
-                        new_exercises =
-                            LE.updateAt exo_idx (removeExerciseSubPart exosubpart) planpart.exercises
-
-                        new_planpart =
-                            { planpart | exercises = new_exercises }
-
-                        new_planparts =
-                            LE.updateAt part_idx (updaterPlanPart new_planpart) trainingplan.parts
-                    in
-                    Model { trainingplan | parts = new_planparts }
-
+    over
+        (plan << parts << matching planpart << exercises << matching exo << parts)
+        (List.filter (\subpart -> subpart /= exosubpart))
+        model
 
 updaterPlanPart : TrainingPlanPart -> TrainingPlanPart -> TrainingPlanPart
 updaterPlanPart a b =

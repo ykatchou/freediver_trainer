@@ -1,5 +1,6 @@
 target
 0.19.1
 /src-back/Cargo.lock
+/src-back/html/static/main.js
 .vscode
 src-front/elm-stuff/generated-code
