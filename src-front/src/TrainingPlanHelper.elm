@@ -97,7 +97,7 @@ removePlanPartFromModel : Model -> TrainingPlanPart -> Model
 removePlanPartFromModel model part_to_del =
     over
         (plan << parts)
-        (List.filter (\part -> part_to_del /= part))
+        (List.filter (\part -> part /= part_to_del))
         model
 
 
@@ -105,15 +105,15 @@ removeExerciseFromModel : Model -> TrainingPlanPart -> TrainingPlanExercise -> M
 removeExerciseFromModel model planpart exo_to_del =
     over
         (plan << parts << matching planpart << exercises)
-        (List.filter (\exo -> exo_to_del /= exo))
+        (List.filter (\exo -> exo /= exo_to_del))
         model
 
 
 removeExerciseSubPartFromModel : Model -> TrainingPlanPart -> TrainingPlanExercise -> TrainingPlanExerciseSubPart -> Model
-removeExerciseSubPartFromModel model planpart exo exosubpart =
+removeExerciseSubPartFromModel model planpart exo exosubpart_to_del =
     over
         (plan << parts << matching planpart << exercises << matching exo << parts)
-        (List.filter (\subpart -> subpart /= exosubpart))
+        (List.filter (\subpart -> subpart /= exosubpart_to_del))
         model
 
 
