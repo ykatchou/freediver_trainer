@@ -32,18 +32,9 @@ main =
 
 init : Model
 init =
-    Model (createDefaultTrainingPlan "My Training Plan" "Yoann Katchourine" "Mid-beginner")
+    --Model (createDefaultTrainingPlan "Training plan" "Yoann K." "Unknown")
+    Model createTestTrainingPlan
 
-
-
--- MSG
-
-
-type Msg
-    = DelWholePlan TrainingPlan
-    | DelPlanPartMsg TrainingPlanPart
-    | DelPlanExerciseMsg TrainingPlanPart TrainingPlanExercise
-    | DelPlanExerciseSubPartMsg TrainingPlanPart TrainingPlanExercise TrainingPlanExerciseSubPart
 
 
 -- UPDATE
@@ -53,7 +44,7 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         DelPlanPartMsg part ->
-            Model (removeTrainingPlanPart model.plan part)
+            removePlanPartFromModel model part
 
         DelPlanExerciseMsg part exo ->
             removeExerciseFromModel model part exo
@@ -80,46 +71,10 @@ view model =
 -------------------------------------------------------------------------------
 
 
-mainColor : Color
-mainColor =
-    rgb255 86 169 210
-
-
-secondColor : Color
-secondColor =
-    rgb255 241 105 41
-
-
-white : Color
-white =
-    rgb255 255 255 255
-
-
-black : Color
-black =
-    rgb255 0 0 0
-
-
 styleTextHeader : List (Attribute Msg)
 styleTextHeader =
     [ padding 1
     , Font.size 13
-    ]
-
-
-stylePartHeader : List (Attribute Msg)
-stylePartHeader =
-    [ padding 1
-    , Font.size 16
-    ]
-
-
-styleExerciceSubPartHeader : List (Attribute Msg)
-styleExerciceSubPartHeader =
-    [ spacing 2
-    , padding 1
-    , Border.color mainColor
-    , Border.width 1
     ]
 
 
@@ -147,6 +102,13 @@ viewTrainingPlan plan =
             [ spacing 5 ]
             (List.map viewTrainingPlanPart plan.parts)
         ]
+
+
+stylePartHeader : List (Attribute Msg)
+stylePartHeader =
+    [ padding 1
+    , Font.size 16
+    ]
 
 
 viewTrainingPlanPart : TrainingPlanPart -> Element Msg
@@ -203,6 +165,15 @@ viewTrainingPlanExercise part exo =
             )
         , Input.button [ alignRight, Font.size 8 ] { onPress = Just (DelPlanExerciseMsg part exo), label = text "❌" }
         ]
+
+
+styleExerciceSubPartHeader : List (Attribute Msg)
+styleExerciceSubPartHeader =
+    [ spacing 2
+    , padding 1
+    , Border.color mainColor
+    , Border.width 1
+    ]
 
 
 viewGenericExerciseSubPart : TrainingPlanExercise -> TrainingPlanExerciseSubPart -> Element Msg

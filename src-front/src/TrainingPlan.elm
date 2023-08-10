@@ -1,6 +1,17 @@
 module TrainingPlan exposing (..)
 
 
+-- MSG
+
+
+type Msg
+    = DelWholePlan TrainingPlan
+    | DelPlanPartMsg TrainingPlanPart
+    | DelPlanExerciseMsg TrainingPlanPart TrainingPlanExercise
+    | DelPlanExerciseSubPartMsg TrainingPlanPart TrainingPlanExercise TrainingPlanExerciseSubPart
+
+
+
 type alias Model =
     { plan : TrainingPlan
     }

@@ -5,7 +5,7 @@ import List.Extra as LE exposing (..)
 import TrainingPlan exposing (..)
 import UtilsHelper exposing (..)
 import Acc exposing (plan, parts, exercises, matching)
-import Accessors exposing (over)
+import Accessors exposing (over, set)
 
 
 
@@ -93,36 +93,20 @@ formatExerciseCategory exo =
             "VWT"
 
 
-removeTrainingPlanPart : TrainingPlan -> TrainingPlanPart -> TrainingPlan
-removeTrainingPlanPart plan part =
-    { plan | parts = LE.remove part plan.parts }
-
-
-removeExercise : TrainingPlanExercise -> TrainingPlanPart -> TrainingPlanPart
-removeExercise exo part =
-    { part | exercises = LE.remove exo part.exercises }
+removePlanPartFromModel : Model -> TrainingPlanPart -> Model
+removePlanPartFromModel model part_to_del =
+    over
+        (plan << parts)
+        (List.filter (\part -> part_to_del /= part))
+        model
 
 
 removeExerciseFromModel : Model -> TrainingPlanPart -> TrainingPlanExercise -> Model
-removeExerciseFromModel model part exo =
-    let
-        curr_index =
-            LE.elemIndex part model.plan.parts
-
-        plan =
-            model.plan
-    in
-    case curr_index of
-        Nothing ->
-            model
-
-        Just idx ->
-            Model { plan | parts = LE.updateAt idx (removeExercise exo) plan.parts }
-
-
-removeExerciseSubPart : TrainingPlanExerciseSubPart -> TrainingPlanExercise -> TrainingPlanExercise
-removeExerciseSubPart part_to_del exo =
-    { exo | parts = LE.remove part_to_del exo.parts }
+removeExerciseFromModel model planpart exo_to_del =
+    over
+        (plan << parts << matching planpart << exercises)
+        (List.filter (\exo -> exo_to_del /= exo))
+        model
 
 
 removeExerciseSubPartFromModel : Model -> TrainingPlanPart -> TrainingPlanExercise -> TrainingPlanExerciseSubPart -> Model
@@ -132,13 +116,51 @@ removeExerciseSubPartFromModel model planpart exo exosubpart =
         (List.filter (\subpart -> subpart /= exosubpart))
         model
 
-updaterPlanPart : TrainingPlanPart -> TrainingPlanPart -> TrainingPlanPart
-updaterPlanPart a b =
-    a
-
 
 createDefaultTrainingPlan : String -> String -> String -> TrainingPlan
 createDefaultTrainingPlan name author group =
+    TrainingPlan name
+        author
+        ""
+        group
+        [ TrainingPlanPart "Briefing"
+            NoWater
+            [ TrainingPlanExercise Break
+                "Session explanations"
+                ""
+                1
+                [ TrainingPlanExerciseSubPart Rest 0 0 (createDurationFromMin 0) (createDurationFromMin 5) ]
+            ]
+        , TrainingPlanPart "Échauffement"
+            SwimmingPool25m
+            [ 
+            ]
+        , TrainingPlanPart "Corps de l’entrainement"
+            SwimmingPool25m
+            [ 
+            ]
+        , TrainingPlanPart "Récupération"
+            SwimmingPool25m
+            [ 
+            ]
+        , TrainingPlanPart "Debriefing"
+            NoWater
+            [ TrainingPlanExercise Break
+                "Session debrief"
+                ""
+                1
+                [ TrainingPlanExerciseSubPart Rest 0 0 (createDurationFromMin 0) (createDurationFromMin 3) ]
+            ]
+        ]
+
+
+createTestTrainingPlan : TrainingPlan
+createTestTrainingPlan  =
+    let
+        name = "Test training plan"
+        author = "Yoann K."
+        group = "Mid-begginner"
+    in
     TrainingPlan name
         author
         ""
