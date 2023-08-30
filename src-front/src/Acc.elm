@@ -14,6 +14,6 @@ exercises = makeOneToOne
   .exercises
   (\change record -> {record | exercises = change record.exercises})
 
-matching x = makeOneToN
-  (\f list -> List.filter (\e -> e == x) list |> List.map f)
-  (\f list -> List.map (\content -> if content == x then f x else x) list)
+matching predicate = makeOneToN
+  (\f list -> List.filter (\content -> predicate content) list |> List.map f)
+  (\f list -> List.map (\content -> if predicate content then f content else content) list)

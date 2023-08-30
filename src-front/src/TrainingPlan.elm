@@ -18,7 +18,8 @@ type alias Model =
 
 
 type alias TrainingPlan =
-    { name : String
+    { 
+    name : String
     , author : String
     , lastchangedate : String
     , group : String
